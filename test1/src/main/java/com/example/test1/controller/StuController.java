@@ -68,7 +68,7 @@ public class StuController {
 	
 	@RequestMapping(value = "/stu-view.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String boardView(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	public String stuView(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = stuService.getStu(map);
 		
