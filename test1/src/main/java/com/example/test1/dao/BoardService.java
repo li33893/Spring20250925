@@ -20,9 +20,29 @@ public class BoardService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		System.out.println("service=>"+map);
-		List <Board> list= boardMapper.boardList(map);
+		List <Board> list= boardMapper.selectboardList(map);
 		
 		resultMap.put("list",list);
+		resultMap.put("result","sucess");
+		return resultMap;
+	}
+	
+	public HashMap<String, Object> removeBoard(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		System.out.println("service=>"+map);
+		int cnt= boardMapper.deleteBoard(map);
+		
+		resultMap.put("result","sucess");
+		return resultMap;
+	}
+	
+
+	public HashMap<String, Object> addBoard(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		System.out.println("service=>"+map);
+		int cnt= boardMapper.insertBoard(map);
 		resultMap.put("result","sucess");
 		return resultMap;
 	}

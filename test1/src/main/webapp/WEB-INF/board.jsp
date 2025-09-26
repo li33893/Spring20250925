@@ -37,12 +37,14 @@
                     <th>제목</th>
                     <th>작성자</th>
                     <th>조회수</th>
+                    <th>삭제</th>
                 </tr>
                 <tr v-for="item in list">
                     <td>{{item.boardN0}}</td>
                     <td>{{item.title}}</td>
                     <td>{{item.userId}}</td>
                     <td>{{item.cnt}}</td>
+                    <td><button @click="fnRemove(item.boardNo)">삭제</button></td>
                 </tr>
             </table>
         </div>
@@ -59,7 +61,8 @@
 				userId:"",
                 boardNo:"",
                 title:"",
-                cnt:0
+                cnt:0,
+                list:[]
 				
             };
         },
@@ -82,6 +85,8 @@
                     }
                 });
             },
+
+            
           
         }, // methods
         mounted() {

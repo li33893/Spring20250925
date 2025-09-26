@@ -8,7 +8,14 @@ public class Board {
 	private String title;
 	private String userId;
 	private int cnt;
+	private String cdate;
 	
+	public String getCdate() {
+		return cdate;
+	}
+	public void setCdate(String cdate) {
+		this.cdate = cdate;
+	}
 	public String getBoardNo() {
 		return boardNo;
 	}

@@ -8,6 +8,7 @@
 		FROM TBL_USER
 		WHERE USERID = #{userId} AND PASSWORD = #{pwd}
 	</select>
+	
 </mapper>
 
 

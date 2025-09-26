@@ -25,11 +25,20 @@
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
-		<div>
-			<input placeholder="stuname" v-model="keyWord">
-			<button @click="fnInfo">검색</button>
-		</div>
-
+		
+        <div>
+            <select v-model="kind" @change="fnlist">
+                <option value="">전체</option>
+                <option value="1">공지사항</option>
+                <option value="2">자유게시판</option>
+                <option value="3">문의게시판</option>
+            </select>
+            <select v-model="option" @change="fnlist">
+                <option value="boardNo">번호순</option>
+                <option value="title">제목순</option>
+                <option value="cnt">조회순</option>
+            </select>
+        </div>
         <div>
             <table>
                 <tr>
@@ -37,14 +46,21 @@
                     <th>제목</th>
                     <th>작성자</th>
                     <th>조회수</th>
+                    <th>작성일</th>
+                    <th>삭제</th>
+                    <th>수정</th>
                 </tr>
                 <tr v-for="item in list">
                     <td>{{item.boardNo}}</td>
                     <td>{{item.title}}</td>
                     <td>{{item.userId}}</td>
                     <td>{{item.cnt}}</td>
+                    <td>{{item.cdate}}</td>
+                    <td><button @click="fnRemove(item.boardNo)">삭제</button></td>
+                    <td><button @click="fnEdit(item.boardNo)">수정</button></td>
                 </tr>
             </table>
+            <div><button @click="fnAdd()">글쓰기</button></div>
         </div>
 		
     </div>
@@ -60,7 +76,10 @@
                 boardNo:"",
                 title:"",
                 cnt:0,
-                list:[]
+                list:[],
+                kind:"",
+                option:"boardNo",
+                content:""
 				
             };
         },
@@ -69,6 +88,8 @@
             fnlist: function () {
                 let self = this;
                 let param = {
+                    kind:self.kind,
+                    option:self.option
 	
 				};
                 $.ajax({
@@ -83,6 +104,34 @@
                     }
                 });
             },
+
+            fnRemove:function(boardNo){
+                let self = this;
+                let param = {
+                    boardNo:boardNo//这里只是变量，并不是声明的东西不能带self	
+				};
+                $.ajax({
+                    url: "board-delete.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+						alert("삭제되었습니다");
+                        self.fnlist();
+						
+                    }
+                });
+            },
+
+
+            fnAdd:function(){
+                location.href="board-add.do"
+
+            }
+
+            
+            
+
           
         }, // methods
         mounted() {

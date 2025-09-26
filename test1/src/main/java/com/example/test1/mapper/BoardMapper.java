@@ -11,7 +11,8 @@ import com.example.test1.model.Board;
 @Mapper
 public interface BoardMapper {
 	
-	List <Board> boardList(HashMap<String, Object> map);
+	List <Board> selectboardList(HashMap<String, Object> map);
 	
-	
+	int deleteBoard(HashMap<String, Object> map);
+	int insertBoard(HashMap<String, Object> map);
 }

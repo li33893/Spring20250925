@@ -25,30 +25,22 @@
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
-		<div>
-			<input placeholder="stuname" v-model="keyWord">
-			<button @click="fnInfo">검색</button>
-		</div>
-
+		
+        
         <div>
             <table>
                 <tr>
-                    <th>학번</th>
-                    <th>이름</th>
-                    <th>학과</th>
-                    <th>학년</th>
-                    <th>성별</th>
-                    <th>삭제</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>내용</th>
                 </tr>
-                <tr v-for="item in list">
-                    <td>{{item.stuNo}}</td>
-                    <td>{{item.stuName}}</td>
-                    <td>{{item.stuDept}}</td>
-                    <td>{{item.stuGrade}}</td>
-                    <td>{{item.stuGender}}</td>
-                    <td><button @click="fnRemove(item.stuNo)">삭제</button></td>
+                <tr>
+                    <td><input type="text" v-model="title"></td>
+                    <td><input type="text" v-model="userId"></td>
+                    <td><textarea v-model="content"></textarea></td>
                 </tr>
             </table>
+            <div><button @click="fnInsert()">삽입</button></div>
         </div>
 		
     </div>
@@ -60,66 +52,46 @@
         data() {
             return {
                 // 변수 - (key : value)
-                list:[]
+				userId:"",
+                boardNo:"",
+                title:"",
+                cnt:0,
+                list:[],
+                kind:"",
+                option:"boardNo",
+                content:""
 				
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnlist: function () {
+            fnInsert: function () {
                 let self = this;
                 let param = {
-	
+                    userId:self.userId,
+                    content:self.content,
+                    title:self.title
 				};
                 $.ajax({
-                    url: "stu-list.dox",
+                    url: "board-add.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-						console.log(data);
-                        self.list=data.list;
+                        alert("삽입되었습니다.");
+                        location.href="board-list.do";
 						
                     }
                 });
             },
-            fnInfo: function () {
-                let self = this;
-                let param = {
-					keyWord:self.keyWord,
-	
-				};
-                $.ajax({
-                    url: "stu-info.dox",
-                    dataType: "json",
-                    type: "POST",
-                    data: param,
-                    success: function (data) {
-						console.log(data);
-						
-                    }
-                });
-            },
-            fnRemove: function (stuNo) {
-                let self = this;
-                let param = {
-                    stuNo:stuNo   
-				};
-                $.ajax({
-                    url: "stu-delete.dox",
-                    dataType: "json",
-                    type: "POST",
-                    data: param,
-                    success: function (data) {
-                        self.fnlist();					
-                    }
-                });
-            }
+
+
+          
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
-            self.fnlist();
+        
         }
     });
 
