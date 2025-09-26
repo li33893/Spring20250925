@@ -21,7 +21,7 @@ public class StuService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		System.out.println("service=>"+map);
-		Student stu= stuMapper.viewStu(map);
+		Student stu= stuMapper. stuInfo(map);
 		if (stu!=null) {
 			System.out.println(stu.getStuName());
 			System.out.println(stu.getStuNo());

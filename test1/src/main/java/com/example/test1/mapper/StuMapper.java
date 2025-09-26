@@ -10,9 +10,10 @@ import com.example.test1.model.Student;
 @Mapper
 public interface StuMapper {
 	
-	Student viewStu(HashMap<String, Object> map);
+	Student stuInfo(HashMap<String, Object> map);
 	List <Student> stuList(HashMap<String, Object> map);
 	int deleteStu(HashMap<String, Object> map);
+	Student viewStu(HashMap<String, Object> map);
 	
 	
 }

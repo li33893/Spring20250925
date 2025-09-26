@@ -43,7 +43,7 @@
                 </tr>
                 <tr v-for="item in list">
                     <td>{{item.stuNo}}</td>
-                    <td><a href="javascript:;" @click="fnView(stuNo)">{{item.stuName}}</a></td>
+                    <td><a href="javascript:;" @click="fnView(item.stuNo)">{{item.stuName}}</a></td>
                     <td>{{item.stuDept}}</td>
                     <td>{{item.stuGrade}}</td>
                     <td>{{item.stuGender}}</td>

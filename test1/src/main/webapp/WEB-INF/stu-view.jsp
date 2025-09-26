@@ -26,6 +26,7 @@
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
          <div>
+            <p>stuNo = ${stuNo}</p>
             <table>
                 <tr>
                     <th>이름</th>
@@ -59,16 +60,16 @@
             fnInfo: function () {
                 let self = this;
                 let param = {
-                    stuNo:self.studNo
+                    stuNo:self.stuNo
                 };
                 $.ajax({
-                    url: "stu-view.dox",
+                    url: "/stu-view.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
                         console.log(data);
-                        self.student=data.student;
+                        self.student=data.info;
 
                     }
                 });

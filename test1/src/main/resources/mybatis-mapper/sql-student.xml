@@ -18,9 +18,11 @@
 	</delete>
 	
 	<select id="viewStu" parameterType="hashmap" resultType="com.example.test1.model.Student">
-		SELECT S.STU_NO,STU_NAME, STU_DEPT, NVL(TO_CHAR(AVG(ENR_GRADE)),0) AVG_SCORE  FROM STUDENT S LEFT JOIN ENROL E ON E.STU_NO=S.STU_NO 
-		GROUP BY S.STU_NO,STU_NAME, STU_DEPT
-		HAVING S.STU_NO==#{stuNo, jdbcType=NUMERIC}
+		SELECT S.STU_NO, STU_NAME, STU_DEPT, NVL(AVG(ENR_GRADE),0) AS AVG_SCORE
+		FROM STUDENT S 
+		LEFT JOIN ENROL E ON E.STU_NO = S.STU_NO
+		WHERE S.STU_NO = #{stuNo}
+		GROUP BY S.STU_NO, STU_NAME, STU_DEPT
 	</select>
 </mapper>
 
