@@ -13,6 +13,8 @@ public interface BoardMapper {
 	
 	List <Board> selectboardList(HashMap<String, Object> map);
 	
+	Board selectBoard(HashMap<String, Object> map);
+	
 	int deleteBoard(HashMap<String, Object> map);
 	int insertBoard(HashMap<String, Object> map);
 }

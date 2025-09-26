@@ -21,7 +21,7 @@ public class StuService {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		System.out.println("service=>"+map);
-		Student stu= stuMapper.stuInfo(map);
+		Student stu= stuMapper.viewStu(map);
 		if (stu!=null) {
 			System.out.println(stu.getStuName());
 			System.out.println(stu.getStuNo());
@@ -50,6 +50,17 @@ public class StuService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		System.out.println("service=>"+map);
 		int cnt=stuMapper.deleteStu(map);
+		resultMap.put("result","sucess");
+		return resultMap;
+	}
+	
+	public HashMap<String, Object> getStu(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		System.out.println("service=>"+map);
+		Student student= stuMapper.viewStu(map);
+		
+		resultMap.put("info",student);
 		resultMap.put("result","sucess");
 		return resultMap;
 	}
