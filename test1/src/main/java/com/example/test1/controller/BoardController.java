@@ -21,16 +21,12 @@ public class BoardController {
 	
 	@RequestMapping("/board-list.do") 
     public String login(Model model) throws Exception{
-
-        return "/board-list";
-    
+        return "/board-list";   
 	}
 	
 	@RequestMapping("/board-add.do") 
     public String add(Model model) throws Exception{
-
         return "/board-add";
-    
 	}
 	
 	
