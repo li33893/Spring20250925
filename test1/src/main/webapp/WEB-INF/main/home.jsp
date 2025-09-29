@@ -25,23 +25,12 @@
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
+         {{sessionName}},wlecome!this is main
          <div>
-            <p>stuNo = ${stuNo}</p>
-            <table>
-                <tr>
-                    <th>이름</th>
-                    <th>학과</th>
-                    <th>전체평균</th>
-                </tr>
-                <tr>
-                    <td>{{student.stuName}}</td>
-                    <td>{{student.stuDept}}</td>
-                    <td>{{student.avgScore}}</td>
-                </tr>
-            </table>
+            <a href="/board-list.do"><button>목록으로</button></a>
+            <button @click="fnLogout">logout</button>
          </div>
-
-        
+         
     </div>
 </body>
 </html>
@@ -51,34 +40,46 @@
         data() {
             return {
                 // 변수 - (key : value)
-                stuNo:"${stuNo}",
-                student:{}
+                sessionId:"${sessionId}",
+                sessionName:"${sessionName}",
+                sessionStatus:"${sessionStatus}"
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnInfo: function () {
+            fnList: function () {
                 let self = this;
-                let param = {
-                    stuNo:self.stuNo
-                };
+                let param = {};
                 $.ajax({
-                    url: "/stu-view.dox",
+                    url: "",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        console.log(data);
-                        self.student=data.info;
 
                     }
                 });
-            }
+            },
+            fnLogout:function(){
+                let self = this;
+                let param = {};
+                $.ajax({
+                    url: "/member/logout.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        alert(data.msg);
+                        location.href="/member/login.do"
+
+                    }
+                });
+            },
+            
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
-            self.fnInfo();
         }
     });
 

@@ -3,27 +3,27 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.test1.mapper.StuMapper">
-	<select id="stuInfo" parameterType="hashmap" resultType="com.example.test1.model.Student">
-		SELECT *
-		FROM STUDENT
-		WHERE STU_NAME = #{keyWord}
-	</select>
 	<select id="stuList" parameterType="hashmap" resultType="com.example.test1.model.Student">
-		SELECT *
+		SELECT * 
 		FROM STUDENT
 	</select>
+	
 	
 	<delete id="deleteStu"  parameterType="hashmap">
 		DELETE FROM STUDENT WHERE STU_NO=#{stuNo}
 	</delete>
 	
-	<select id="viewStu" parameterType="hashmap" resultType="com.example.test1.model.Student">
+	<select id="getStuView" parameterType="hashmap" resultType="com.example.test1.model.Student">
 		SELECT S.STU_NO, STU_NAME, STU_DEPT, NVL(AVG(ENR_GRADE),0) AS AVG_SCORE
 		FROM STUDENT S 
 		LEFT JOIN ENROL E ON E.STU_NO = S.STU_NO
 		WHERE S.STU_NO = #{stuNo}
 		GROUP BY S.STU_NO, STU_NAME, STU_DEPT
 	</select>
+	
+	<update id="updateStu" parameterType="hashmap">
+		UPDATE STUDENT SET STU_NAME=#{stuName},STU_DEPT=#{stuDept} WHERE STU_NO = #{stuNo}
+	</update>
 </mapper>
 
 

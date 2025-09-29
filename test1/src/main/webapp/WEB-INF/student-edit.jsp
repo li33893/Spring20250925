@@ -25,24 +25,24 @@
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
-		
-        
-        <div>
+         <div>
+            <p>stuNo = ${stuNo}</p>
             <table>
                 <tr>
-                    <th>제목</th>
-                    <th>작성자</th>
-                    <th>내용</th>
+                    <th>이름</th>
+                    <th>학과</th>
+                    <th>전체평균</th>
                 </tr>
                 <tr>
-                    <td><input type="text" v-model="title"></td>
-                    <td><input type="text" v-model="userId" readonly></td>
-                    <td><textarea v-model="content"></textarea></td>
+                    <td><input type="text" v-model="student.stuName"></td>
+                    <td><input type="text" v-model="student.stuDept"></td>
+                    <td>{{student.avgScore}}</td>
                 </tr>
             </table>
-            <div><button @click="fnInsert()">삽입</button></div>
-        </div>
-		
+			<button @click="fnEdit()">제출</button>
+         </div>
+
+        
     </div>
 </body>
 </html>
@@ -52,51 +52,55 @@
         data() {
             return {
                 // 변수 - (key : value)
-				userId:"${sessionId}",
-                boardNo:"",
-                title:"",
-                cnt:0,
-                list:[],
-                kind:"",
-                option:"boardNo",
-                content:"",
-                sessionid:"${sessionId}"
+                stuNo:"${stuNo}",
 				
+                student:{
+					stuNo:"${stuNo}",
+					stuName:"",
+					stuDept:"",
+					
+				}
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnInsert: function () {
+			fnInfo: function () {
+			                let self = this;
+			                let param = {
+			                    stuNo:self.stuNo
+			                };
+			                $.ajax({
+			                    url: "/student-view.dox",
+			                    dataType: "json",
+			                    type: "POST",
+			                    data: param,
+			                    success: function (data) {
+			                        console.log(data);
+			                        self.student=data.info;
+
+			                    }
+			                });
+			            },
+            fnEdit: function () {
                 let self = this;
-                let param = {
-                    userId:self.userId,
-                    content:self.content,
-                    title:self.title
-				};
                 $.ajax({
-                    url: "board-add.dox",
+                    url: "/student-edit.dox",
                     dataType: "json",
                     type: "POST",
-                    data: param,
+                    data: self.student,
                     success: function (data) {
-                        alert("삽입되었습니다.");
-                        location.href="board-list.do";
-						
+                        console.log(data);
+						alert("저장 완료!");
+                        self.student=data.stu;
+
                     }
                 });
-            },
-
-
-          
+            }
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
-            if(self.sessionId==""){
-                alert("you must log in first");
-                location.href="/member/login.do";
-            }
-        
+            self.fnInfo();
         }
     });
 

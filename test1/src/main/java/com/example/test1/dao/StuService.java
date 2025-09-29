@@ -34,15 +34,15 @@ public class StuService {
 	
 	public HashMap<String, Object> getStuList(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
-		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		System.out.println("service=>"+map);
-		List <Student> list= stuMapper.stuList(map);
+		HashMap<String,Object>resultMap=new HashMap<String,Object>();
+		List <Student> stuList=stuMapper.stuList(map);
 		
-		resultMap.put("list",list);
-		resultMap.put("result","sucess");
+		resultMap.put("list", stuList);
+		resultMap.put("result", "success");
+		
 		return resultMap;
+		
 	}
-
 
 
 	public HashMap<String, Object> removeStu(HashMap<String, Object> map) {
@@ -54,13 +54,24 @@ public class StuService {
 		return resultMap;
 	}
 	
-	public HashMap<String, Object> getStu(HashMap<String, Object> map) {
+	public HashMap<String, Object> getView(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String,Object>resultMap=new HashMap<String,Object>();
+		Student stu=stuMapper.getStuView(map);
+		
+		resultMap.put("info",stu);
+		resultMap.put("result","sucess");
+		
+		
+		return resultMap;
+		
+	}
+	
+	public HashMap<String, Object> getEdit(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		System.out.println("service=>"+map);
-		Student student= stuMapper.viewStu(map);
-		
-		resultMap.put("info",student);
+		int cnt= stuMapper.updateStu(map);
 		resultMap.put("result","sucess");
 		return resultMap;
 	}

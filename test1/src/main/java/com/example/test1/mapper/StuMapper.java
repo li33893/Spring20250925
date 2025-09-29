@@ -8,12 +8,12 @@ import org.apache.ibatis.annotations.Mapper;
 import com.example.test1.model.Student; 
 
 @Mapper
-public interface StuMapper {
-	
-	Student stuInfo(HashMap<String, Object> map);
-	List <Student> stuList(HashMap<String, Object> map);
-	int deleteStu(HashMap<String, Object> map);
-	Student viewStu(HashMap<String, Object> map);
-	
+public interface StuMapper{
+	//返回带student泛型的list
+	 List <Student> stuList(HashMap <String,Object>map);
+	 Student getStuView(HashMap <String,Object>map);
+	 int updateStu(HashMap<String, Object> map);
+	 int deleteStu(HashMap<String, Object> map);
+	 Student stuInfo(HashMap<String, Object> map);
 	
 }

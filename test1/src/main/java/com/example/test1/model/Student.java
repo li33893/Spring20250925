@@ -7,7 +7,14 @@ public class Student {
 	private String stuDept;
 	private String stuName;
 	private String stuGrade;
+	private int avgScore;
 	
+	public int getAvgScore() {
+		return avgScore;
+	}
+	public void setAvgScore(int avgScore) {
+		this.avgScore = avgScore;
+	}
 	public String getStuGrade() {
 		return stuGrade;
 	}
@@ -41,8 +48,4 @@ public class Student {
 		this.stuName = stuName;
 	}
 	
-
-
-	
-
 }

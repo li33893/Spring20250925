@@ -25,24 +25,19 @@
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
-		
-        
-        <div>
-            <table>
-                <tr>
-                    <th>제목</th>
-                    <th>작성자</th>
-                    <th>내용</th>
-                </tr>
-                <tr>
-                    <td><input type="text" v-model="title"></td>
-                    <td><input type="text" v-model="userId" readonly></td>
-                    <td><textarea v-model="content"></textarea></td>
-                </tr>
-            </table>
-            <div><button @click="fnInsert()">삽입</button></div>
+         <div>
+            <div>
+                <label >id <input type="text" v-model="id"></label>
+            </div>
+            <div>
+                <label >password <input type="password" v-model="pwd"></label>
+            </div>
+         </div>
+         <div>
+            <button @click="fnLogin">login</button>
+            <a href="/member/join.do"><button>signup</button></a>
+            
         </div>
-		
     </div>
 </body>
 </html>
@@ -52,51 +47,37 @@
         data() {
             return {
                 // 변수 - (key : value)
-				userId:"${sessionId}",
-                boardNo:"",
-                title:"",
-                cnt:0,
-                list:[],
-                kind:"",
-                option:"boardNo",
-                content:"",
-                sessionid:"${sessionId}"
-				
+                id:"",
+                pwd:""
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnInsert: function () {
+            fnLogin: function () {
                 let self = this;
                 let param = {
-                    userId:self.userId,
-                    content:self.content,
-                    title:self.title
-				};
+                    id:self.id,
+                    pwd:self.pwd
+                };
                 $.ajax({
-                    url: "board-add.dox",
+                    url: "/member/login.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        alert("삽입되었습니다.");
-                        location.href="board-list.do";
-						
+                        alert(data.msg);
+                        console.log(data);
+                        if(data.result=="success"){
+                            location.href="/main.do";
+                        }
+
                     }
                 });
-            },
-
-
-          
+            }
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
-            if(self.sessionId==""){
-                alert("you must log in first");
-                location.href="/member/login.do";
-            }
-        
         }
     });
 

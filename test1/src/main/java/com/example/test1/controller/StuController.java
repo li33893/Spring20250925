@@ -23,11 +23,10 @@ public class StuController {
 	StuService stuService;
 	
 	@RequestMapping("/stu-list.do") 
-    public String login(Model model) throws Exception{
+    public String getlist(Model model) throws Exception{
 
-        return "/stu-list";
-    
-	}
+        return "/student-list";
+    }
 	
 	@RequestMapping(value = "/stu-info.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
@@ -41,11 +40,9 @@ public class StuController {
 	
 	@RequestMapping(value = "/stu-list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String stuList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	public String StuList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = stuService.getStuList(map);
-		System.out.println(map);
-		
 		return new Gson().toJson(resultMap);
 	}
 	
@@ -59,20 +56,41 @@ public class StuController {
 		return new Gson().toJson(resultMap);
 	}
 	
+
 	@RequestMapping("/stu-view.do") 
     public String view(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		request.setAttribute("stuNo",map.get("stuNo"));
-        return "/stu-view";
+        return "/student-view";
 	}
 	
-	@RequestMapping(value = "/stu-view.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@RequestMapping("/stu-edit.do") 
+    public String edit(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		request.setAttribute("stuNo",map.get("stuNo"));
+        return "/student-edit";
+	}
+	
+	@RequestMapping(value = "/student-view.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String stuView(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = stuService.getStu(map);
+		resultMap = stuService.getView(map);
 		
 		System.out.println(map);
+		
+		
+		return new Gson().toJson(resultMap);
+	}
+	
+	@RequestMapping(value = "/student-edit.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String stuEdit(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap = stuService.getEdit(map);
+		
+		System.out.println(map);
+		
 		
 		return new Gson().toJson(resultMap);
 	}

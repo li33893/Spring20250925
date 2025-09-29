@@ -40,6 +40,7 @@
                     <th>학년</th>
                     <th>성별</th>
                     <th>삭제</th>
+                    <th>수정</th>
                 </tr>
                 <tr v-for="item in list">
                     <td>{{item.stuNo}}</td>
@@ -48,6 +49,7 @@
                     <td>{{item.stuGrade}}</td>
                     <td>{{item.stuGender}}</td>
                     <td><button @click="fnRemove(item.stuNo)">삭제</button></td>
+                    <td><button @click="fnEdit(item.stuNo)">수정</button></td>
                 </tr>
             </table>
         </div>
@@ -120,6 +122,11 @@
             
             fnView:function(stuNo){
                 pageChange("stu-view.do",{stuNo:stuNo});
+
+            },
+
+            fnEdit:function(stuNo){
+                pageChange("stu-edit.do",{stuNo:stuNo});
 
             }
 

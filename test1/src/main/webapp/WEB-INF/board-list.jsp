@@ -57,7 +57,9 @@
                     <td>{{item.userId}}</td>
                     <td>{{item.cnt}}</td>
                     <td>{{item.cdate}}</td>
-                    <td><button @click="fnRemove(item.boardNo)">삭제</button></td>
+                    <td>
+                        <button @click="fnRemove(item.boardNo)" id="Del" v-if="sessionId==item.userId||status=='A'">삭제</button>
+                    </td>
                     <td><button @click="fnEdit(item.boardNo)">수정</button></td>
                 </tr>
             </table>
@@ -80,7 +82,9 @@
                 list:[],
                 kind:"",
                 option:"boardNo",
-                content:""
+                content:"",
+                sessionId:"${sessionId}",
+                status:"${sessionStatus}"
 				
             };
         },
@@ -90,7 +94,8 @@
                 let self = this;
                 let param = {
                     kind:self.kind,
-                    option:self.option
+                    option:self.option,
+                    
 	
 				};
                 $.ajax({
@@ -126,14 +131,21 @@
 
 
             fnAdd:function(){
+                let self=this;
+                if(!self.sessionId){
+                    alert("로그인 후 사용해 주세요");
+                    location.href="/member/login.do";
+                    return;
+                }
                 location.href="board-add.do"
-
             },
 
             fnView:function(boardNo){
                 pageChange("board-view.do",{boardNo:boardNo});
 
-            }
+            },
+
+            
 
             
             
