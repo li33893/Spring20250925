@@ -20,7 +20,7 @@ public class BoardController {
 
 	@Autowired
 	BoardService boardService;
-	
+
 	@RequestMapping("/board-list.do") 
     public String login(Model model) throws Exception{
         return "/board-list";   
@@ -38,9 +38,20 @@ public class BoardController {
         return "/board-view";
 	}
 	
+	//!前置知识：MVC，Servelt
+	//1.@RequestMapping(...)是告诉Spring MVC 这个方法对应哪个url，请求的类型是什么，返回内容类型是什么
+	//value里面装的是请求的url
+	//method是请求的方法，post/get
+	//procedures里面装的是返回数据的格式，告诉Spring我返回的是Jason格式的“数据”（application区别于text纯文本），而且编码是utf-8
 	@RequestMapping(value = "/board-list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String boardList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		//1.输入参数
+		//1.1@RequestParam
+		//所有传入前端的数据里面最重要的是@RequestParam，他表示前端页面发送过来的数据会自动装进这个map里面
+		//e.g.,前端传的是{“boardNo”：3}，那么map.get{"boardNo"}就能取到3
+		//1.2 Model model Spring MVC自带的“数据传递的容器”，可以往里面放数据，返回给前端的页面（只在返回时用）
+		//？？？注意，这里用了@ResponseBody，意味着Model model根本没用上，不写也行
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap = boardService.boardList(map);
 		
