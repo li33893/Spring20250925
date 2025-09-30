@@ -48,7 +48,8 @@ public class BoardService {
 		return resultMap;
 	}
 	
-	
+	//1.这个map是方法参数，是从controller里面传进来的map，controller里面的map也只负责传进来，都是只负责输入不负责传出
+	//
 	public HashMap<String, Object> getBoard(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
