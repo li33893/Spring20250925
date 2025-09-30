@@ -45,6 +45,7 @@ public class BoardController {
 	}
 	
 	//!前置知识：MVC，Servelt
+	//关键理解：一个方法里返回的都是map，但是输入和返回作用的行不一样，分别在不同的时刻起作用
 	//1.@RequestMapping(...)是告诉Spring MVC 这个方法对应哪个url，请求的类型是什么，返回内容类型是什么
 	//value里面装的是请求的url
 	//method是请求的方法，post/get
@@ -59,6 +60,8 @@ public class BoardController {
 		//1.2 Model model Spring MVC自带的“数据传递的容器”，可以往里面放数据，返回给前端的页面（只在返回时用）
 		//？？？注意，这里用了@ResponseBody，意味着Model model根本没用上，不写也行
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+
+		//2.返回
 		resultMap = boardService.boardList(map);
 		
 		System.out.println(map);
