@@ -31,10 +31,15 @@ public class BoardController {
     public String add(Model model) throws Exception{
         return "/board-add";
 	}
-	
-	@RequestMapping("/board-view.do") 
+
+
+	//1.@RequestMapping(...)是告诉Spring MVC 这个方法对应哪个url，请求的类型是什么，返回内容类型是什么
+	//代表当前的HTTP请求，允许你设置或读取request范围的属性
+	//？？老师给的那个test依旧没看懂
+	@RequestMapping("/board-view.do")
     public String view(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
-		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();//多余
+		//把map里的boardNo值放到request里面去
 		request.setAttribute("boardNo",map.get("boardNo"));
         return "/board-view";
 	}
