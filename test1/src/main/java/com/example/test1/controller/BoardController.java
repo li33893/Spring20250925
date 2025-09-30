@@ -23,6 +23,7 @@ public class BoardController {
 
 	@RequestMapping("/board-list.do") 
     public String login(Model model) throws Exception{
+		//这里的modelmodel也可以省略
         return "/board-list";   
 	}
 	
