@@ -26,7 +26,6 @@
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
          <div>
-            <p>stuNo = ${stuNo}</p>
             <table>
                 <tr>
                     <th>이름</th>

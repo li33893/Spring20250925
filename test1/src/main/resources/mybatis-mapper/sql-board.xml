@@ -4,23 +4,64 @@
 
 <mapper namespace="com.example.test1.mapper.BoardMapper">
 	<select id="selectboardList" parameterType="hashmap" resultType="com.example.test1.model.Board">
-		SELECT B.*, TO_CHAR(CDATETIME,'YYYY-MM-DD') AS CDATE
+    SELECT B.*, TO_CHAR(CDATETIME,'YYYY-MM-DD') AS CDATE, NVL(CCNT,0) AS COMMENTCNT 
+    FROM TBL_BOARD B
+    LEFT JOIN (
+        SELECT BOARDNO, COUNT(*) AS CCNT
+        FROM TBL_COMMENT
+        GROUP BY BOARDNO
+    ) T ON T.BOARDNO = B.BOARDNO
+    WHERE 1=1
+    <if test="kind != null and kind != ''">
+        AND KIND = #{kind}
+    </if>
+    
+    <if test="searchOption=='all'">
+        AND (
+            TITLE LIKE '%' || #{keyWord} || '%' OR USERID LIKE '%' || #{keyWord} || '%' 
+        )
+    </if>
+    
+    <if test="searchOption=='title'">
+        AND (
+            TITLE LIKE '%' || #{keyWord} || '%' 
+
+        )
+    </if>
+    
+    <if test="searchOption=='id'">
+        AND (
+            USERID LIKE '%' || #{keyWord} || '%' 
+        )
+    </if>
+
+    <if test="option=='title'">
+        ORDER BY TITLE
+    </if>
+    <if test="option=='boardNo'">
+        ORDER BY B.BOARDNO
+    </if>
+    <if test="option=='cnt'">
+        ORDER BY COMMENTCNT DESC
+    </if>
+</select>
+
+	<select id="selectBoard" parameterType="hashmap" resultType="com.example.test1.model.Board">
+		SELECT *
 		FROM TBL_BOARD B
-		WHERE 1=1
-		<if test="kind !='' and kind !=null">
-			AND KIND=#{kind}
-		</if>
-		<if test="option=='title'">
-		 ORDER BY TITLE 
-		</if>
-		<if test="option=='boardNo'">
-		 ORDER BY BOARDNO
-		</if>
-		<if test="option=='cnt'">
-		 ORDER BY CNT DESC
-		</if>
-		
+		INNER JOIN TBL_USER U ON B.USERID=U.USERID
+		WHERE BOARDNO = #{boardNo}
 	</select>
+	
+	<select id="selectCommentList" parameterType="hashmap" resultType="com.example.test1.model.Comment">
+		SELECT C.*, U.NICKNAME
+		FROM TBL_COMMENT C
+		INNER JOIN TBL_USER U ON U.USERID=C.USERID
+		WHERE C.BOARDNO=#{boardNo}
+	</select>
+
+
+
 	
 	<delete id="deleteBoard" parameterType="hashmap" >
 		DELETE FROM TBL_BOARD
@@ -30,9 +71,6 @@
 		INSERT INTO TBL_BOARD VALUES (B_SEQ.NEXTVAL, #{title}, #{content}, #{userId},0,0,1,SYSDATE,SYSDATE)
 	</insert>
 	
-	<select id="selectBoard" parameterType="hashmap" resultType="com.example.test1.model.Board">
-		SELECT * FROM TBL_BOARD WHERE BOARDNO=#{boardNo}
-	</select>
 </mapper>
 
 

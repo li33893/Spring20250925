@@ -8,17 +8,17 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
-        table, tr, td, th{
+       
+        #board table, tr, td, th{
             border : 1px solid black;
             border-collapse: collapse;
             padding : 5px 10px;
-            text-align: center;
         }
         th{
             background-color: beige;
         }
-        tr:nth-child(even){
-            background-color: azure;
+        input{
+            width: 350px;
         }
     </style>
 </head>
@@ -38,9 +38,40 @@
                     <td>{{info.title}}</td>
                     <td>{{info.userId}}</td>
                     <td>{{info.cnt}}</td>
+                
+
                 </tr>
             </table>
          </div>
+
+
+           <div>
+            <table>
+                <tr >
+                    <th>닉네임</th>
+                    <th>작성 내용</th>
+                    <th>삭제</th>
+                    <th>수정</th>
+                </tr>
+               
+                <tr v-for="item in commentList">
+                    <td>{{item.nickName}}</td>
+                    <td>{{item.contents}}</td>
+
+                    <td><button>삭제</button></td>
+                    <td><button>수정</button></td>
+                </tr>
+            </table>
+         </div>
+
+        <hr>
+        <table id="input">
+            <th>댓글 입력</th>
+            <td>
+                <textarea cols="40" rows="4"></textarea>
+            </td>
+            <td><button>저장</button></td>
+        </table>
 
         
     </div>
@@ -53,7 +84,8 @@
             return {
                 // 변수 - (key : value)
                 boardNo:"${boardNo}",
-                info:{}
+                info:{},
+                commentList:[]
             };
         },
         methods: {
@@ -71,6 +103,7 @@
                     success: function (data) {
                         console.log(data);
                         self.info=data.info;
+                        self.commentList=data.commentList;
 
                     }
                 });

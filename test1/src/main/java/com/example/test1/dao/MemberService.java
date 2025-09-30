@@ -71,5 +71,18 @@ public class MemberService {
 		return resultMap;
 		
 	}
+	
+	public HashMap<String, Object> memberInsert(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		System.out.println("service=>"+map);
+		int cnt= memberMapper.memberAdd(map);
+		if(cnt<1) {
+			resultMap.put("result","fail");
+		}else {
+			resultMap.put("result","sucess");
+		}
+		return resultMap;
+	}
 
 }

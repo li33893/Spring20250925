@@ -9,7 +9,15 @@ public class Board {
 	private String userId;
 	private int cnt;
 	private String cdate;
+	private int commentCnt;
 	
+	
+	public int getCommentCnt() {
+		return commentCnt;
+	}
+	public void setCommentCnt(int commentCnt) {
+		this.commentCnt = commentCnt;
+	}
 	public String getCdate() {
 		return cdate;
 	}

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.test1.mapper.BoardMapper;
 import com.example.test1.model.Board;
+import com.example.test1.model.Comment;
 
 
 @Service
@@ -43,7 +44,7 @@ public class BoardService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		System.out.println("service=>"+map);
 		int cnt= boardMapper.insertBoard(map);
-		resultMap.put("result","sucess");
+		resultMap.put("result","success");
 		return resultMap;
 	}
 	
@@ -53,11 +54,15 @@ public class BoardService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		System.out.println("service=>"+map);
 		Board board= boardMapper.selectBoard(map);
+		List <Comment> commentList=boardMapper.selectCommentList(map);
 		
 		resultMap.put("info",board);
+		resultMap.put("commentList", commentList);
 		resultMap.put("result","sucess");
 		return resultMap;
 	}
+	
+	
 	
 	
 

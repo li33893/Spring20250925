@@ -26,6 +26,16 @@
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
+         <div>
+            <select v-model="searchOption">
+                <option value="all">::전체::</option>
+                <option value="title">::제목::</option>
+                <option value="userId">::작성자::</option>
+            </select>
+            검색어:
+            <input v-model="keyWord">
+            <button @click="fnlist()">검색</button>
+         </div>
 		
         <div>
             <select v-model="kind" @change="fnlist">
@@ -53,7 +63,10 @@
                 </tr>
                 <tr v-for="item in list">
                     <td>{{item.boardNo}}</td>
-                    <td><a href="javascript:;" @click="fnView(item.boardNo)">{{item.title}}</a></td>
+                    <td>
+                        <a href="javascript:;" @click="fnView(item.boardNo)">{{item.title}}</a>
+                        <span style="color:red" v-if="item.commentCnt!=0">[{{item.commentCnt}}]</span>
+                    </td>
                     <td>{{item.userId}}</td>
                     <td>{{item.cnt}}</td>
                     <td>{{item.cdate}}</td>
@@ -84,7 +97,9 @@
                 option:"boardNo",
                 content:"",
                 sessionId:"${sessionId}",
-                status:"${sessionStatus}"
+                status:"${sessionStatus}",
+                searchOption:"all",
+                keyWord:""
 				
             };
         },
@@ -95,8 +110,9 @@
                 let param = {
                     kind:self.kind,
                     option:self.option,
+                    keyWord:self.keyWord,
+                    searchOption:self.searchOption
                     
-	
 				};
                 $.ajax({
                     url: "board-list.dox",
@@ -144,6 +160,10 @@
                 pageChange("board-view.do",{boardNo:boardNo});
 
             },
+
+            
+
+    
 
             
 
