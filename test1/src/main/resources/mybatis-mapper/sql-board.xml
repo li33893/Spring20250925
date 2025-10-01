@@ -4,7 +4,9 @@
 
 <mapper namespace="com.example.test1.mapper.BoardMapper">
 	<select id="selectboardList" parameterType="hashmap" resultType="com.example.test1.model.Board">
-    SELECT B.*, TO_CHAR(CDATETIME,'YYYY-MM-DD') AS CDATE, NVL(CCNT,0) AS COMMENTCNT 
+    SELECT B.*,  
+    DECODE(TO_CHAR(CDATETIME,'YYYY-MM-DD'),TO_CHAR(SYSDATE,'YYYY-MM-DD'),TO_CHAR(CDATETIME,'HH24:MI:SS'),TO_CHAR(CDATETIME,'YYYY-MM-DD')) AS CDATE,
+    NVL(CCNT,0) AS COMMENTCNT 
     FROM TBL_BOARD B
     LEFT JOIN (
         SELECT BOARDNO, COUNT(*) AS CCNT
@@ -44,7 +46,46 @@
     <if test="option=='cnt'">
         ORDER BY COMMENTCNT DESC
     </if>
+    <if test="option=='time'">
+        ORDER BY B.CDATETIME DESC
+    </if>
+    OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    
 </select>
+
+
+
+<select id="selectBoardCnt" parameterType="hashmap" resultType="int">
+    SELECT COUNT(*)
+    FROM TBL_BOARD B
+    WHERE 1=1
+    <if test="kind != null and kind != ''">
+        AND KIND = #{kind}
+    </if>
+    
+    <if test="searchOption=='all'">
+        AND (
+            TITLE LIKE '%' || #{keyWord} || '%' OR USERID LIKE '%' || #{keyWord} || '%' 
+        )
+    </if>
+    
+    <if test="searchOption=='title'">
+        AND (
+            TITLE LIKE '%' || #{keyWord} || '%' 
+
+        )
+    </if>
+    
+    <if test="searchOption=='id'">
+        AND (
+            USERID LIKE '%' || #{keyWord} || '%' 
+        )
+    </if>
+    
+    
+
+</select>
+
 
 	<select id="selectBoard" parameterType="hashmap" resultType="com.example.test1.model.Board">
 		SELECT *
@@ -58,6 +99,7 @@
 		FROM TBL_COMMENT C
 		INNER JOIN TBL_USER U ON U.USERID=C.USERID
 		WHERE C.BOARDNO=#{boardNo}
+		ORDER BY C.CDATETIME ASC
 	</select>
 
 
@@ -70,6 +112,14 @@
 	<insert id="insertBoard" parameterType="hashmap">
 		INSERT INTO TBL_BOARD VALUES (B_SEQ.NEXTVAL, #{title}, #{content}, #{userId},0,0,1,SYSDATE,SYSDATE)
 	</insert>
+	
+	<insert id="insertComment" parameterType="hashmap">
+		INSERT INTO TBL_COMMENT VALUES (COMMENT_SEQ.NEXTVAL, #{boardNo}, #{content},#{id},0,NULL,SYSDATE,SYSDATE)
+	</insert>
+	
+	<update id="updateCnt" parameterType="hashmap">
+		UPDATE TBL_BOARD SET CNT=CNT+1 WHERE BOARDNO=#{boardNo}
+	</update>
 	
 </mapper>
 

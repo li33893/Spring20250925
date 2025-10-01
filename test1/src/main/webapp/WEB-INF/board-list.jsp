@@ -21,6 +21,10 @@
         tr:nth-child(even){
             background-color: azure;
         }
+        .active{
+            color:black;
+            font-weight:bold;
+        }
     </style>
 </head>
 <body>
@@ -36,6 +40,12 @@
             <input v-model="keyWord">
             <button @click="fnlist()">검색</button>
          </div>
+
+         <select v-model="pageSize" @change="fnlist">
+            <option value="5">5개씩</option>
+            <option value="10">10개식</option>
+            <option value="15">15개씩</option>
+         </select>
 		
         <div>
             <select v-model="kind" @change="fnlist">
@@ -45,6 +55,7 @@
                 <option value="3">문의게시판</option>
             </select>
             <select v-model="option" @change="fnlist">
+                <option value="time">시간순</option>
                 <option value="boardNo">번호순</option>
                 <option value="title">제목순</option>
                 <option value="cnt">조회순</option>
@@ -64,6 +75,7 @@
                 <tr v-for="item in list">
                     <td>{{item.boardNo}}</td>
                     <td>
+                        <!--有很多是后v-if更方便一些，其实也不用v-if，只要在某种条件下显示非转换的情况就用v-if就行-->
                         <a href="javascript:;" @click="fnView(item.boardNo)">{{item.title}}</a>
                         <span style="color:red" v-if="item.commentCnt!=0">[{{item.commentCnt}}]</span>
                     </td>
@@ -76,6 +88,16 @@
                     <td><button @click="fnEdit(item.boardNo)">수정</button></td>
                 </tr>
             </table>
+            <div>
+                <!--在 Vue 3（和 Vue 2）里，v-for 不仅可以迭代数组，也可以迭代一个数字，并且从1开始-->
+                
+                <a href="javascript:;" @click="fnMove(-1)" v-if="page!=1" >👈</a>
+                    <a href="javascript:;" v-for="num in index" @click="page=num;fnlist()" > 
+                    <span :class="{active:page==num}">{{num}}</span>
+                </a>
+                <a href="javascript:;" @click="fnMove(+1)" v-if="page!=index" >👉</a>
+                
+            </div>
             <div><button @click="fnAdd()">글쓰기</button></div>
         </div>
 		
@@ -94,12 +116,17 @@
                 cnt:0,
                 list:[],
                 kind:"",
-                option:"boardNo",
+                option:"time",
                 content:"",
                 sessionId:"${sessionId}",
                 status:"${sessionStatus}",
                 searchOption:"all",
-                keyWord:""
+                keyWord:"",
+                pageSize:"5",//한페이지에 출력할 개수
+                page:1,//现在所在页面
+                index:0//최대 페이지 값
+                
+
 				
             };
         },
@@ -108,10 +135,13 @@
             fnlist: function () {
                 let self = this;
                 let param = {
+                    boarNo:self.boardNo,
                     kind:self.kind,
                     option:self.option,
                     keyWord:self.keyWord,
-                    searchOption:self.searchOption
+                    searchOption:self.searchOption,
+                    offset:(self.page-1)*self.pageSize,
+                    pageSize:self.pageSize,
                     
 				};
                 $.ajax({
@@ -122,6 +152,7 @@
                     success: function (data) {
 						console.log(data);
                         self.list=data.list;
+                        self.index=Math.ceil(data.cnt/self.pageSize);
 						
                     }
                 });
@@ -160,6 +191,14 @@
                 pageChange("board-view.do",{boardNo:boardNo});
 
             },
+            
+            fnMove:function(num){
+                let self=this;
+                self.page+=num;
+                self.fnlist();
+            }
+
+        
 
             
 

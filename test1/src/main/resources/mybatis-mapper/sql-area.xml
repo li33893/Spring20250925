@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.test1.mapper.AreaMapper">
+	<select id="selectareaList" parameterType="hashmap" resultType="com.example.test1.model.Area">
+		SELECT * FROM AREA WHERE GU IS NOT NULL AND DONG IS NOT NULL
+	<if test="si != null and si != ''"> 
+		AND SI=#{si}
+	</if>
+		OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+	</select>
+
+
+	<select id="selectAreaCnt" parameterType="hashmap" resultType="int">
+	    SELECT COUNT(*) FROM AREA WHERE GU IS NOT NULL AND DONG IS NOT NULL
+	    <if test="si != null and si != ''"> 
+		AND SI=#{si}
+		</if>
+	</select>
+	
+	<select id="selectSiList" parameterType="hashmap" resultType="com.example.test1.model.Area">
+	    SELECT * FROM AREA WHERE GU IS NULL
+	</select>
+	
+	
+</mapper>    

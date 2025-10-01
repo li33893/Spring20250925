@@ -68,9 +68,9 @@
         <table id="input">
             <th>댓글 입력</th>
             <td>
-                <textarea cols="40" rows="4"></textarea>
+                <textarea cols="40" rows="4" v-model="content"></textarea>
             </td>
-            <td><button>저장</button></td>
+            <td><button @click="fnAddComment">저장</button></td>
         </table>
 
         
@@ -85,7 +85,10 @@
                 // 변수 - (key : value)
                 boardNo:"${boardNo}",
                 info:{},
-                commentList:[]
+                commentList:[],
+                content:"",
+                sessionId:"${sessionId}",
+                cnt:0
             };
         },
         methods: {
@@ -107,12 +110,53 @@
 
                     }
                 });
+            },
+            fnAddComment:function(content){
+                let self=this;
+                 let param = {
+                    boardNo:self.boardNo,
+                    content:self.content,
+                    id:self.sessionId
+                };
+
+                $.ajax({
+                    url: "/comment/add.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        console.log(data);
+                        alert(data.msg);
+                        self.fnInfo();
+                        self.content="";
+
+                    }
+                });
+                
+            },
+            fnCntPlus:function(cnt){
+                let self=this;   
+                let param={
+                    cnt:self.cnt,
+                    boardNo:self.boardNo
+                }
+                 $.ajax({
+                    url: "",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        
+                    }
+                });                
             }
+
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
             self.fnInfo();
+            self.fnCntPlus();
         }
     });
 
