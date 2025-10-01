@@ -32,7 +32,8 @@
 
         <div>
             도/특별시
-            <select v-model="si" @change="fnList">
+            <!--???还是没太搞清楚重置的问题-->
+            <select v-model="si" @change="fnReset">
                 <option value="">전체</option>
                 <option :value="item.si" v-for="item in siList">{{item.si}}</option>
             </select>
@@ -108,6 +109,7 @@
                     success: function (data) {
                         self.list=data.list;
                         self.index=Math.ceil(data.cnt/self.pageSize);
+                        //？？没搞懂什么时候在哪里需要刷新
                         self.fnPageRange();
                     }
                 });
@@ -134,13 +136,29 @@
                 let self=this;
                 self.pageRangeList=[];
 
-                self.pageLowerRange=Math.floor(self.page/10)*10;
-                if(self.pageLowerRange==Math.floor(self.index/10)*10){
-                    for(i=self.pageLowerRange;i<self.index;i++){
+
+
+                //!!!计算页码的时候一定要注意upperrange和lowerrange能不能正常出现在一页：
+                //？？？还是没搞懂为什么我这种算法的问题是10的倍数也会自动计算到下一组
+                // self.pageLowerRange=Math.floor(self.page/self.pageRange)*self.pageRange;
+                // if(self.pageLowerRange==Math.floor(self.index/self.pageRange)*self.pageRange){
+                //     for(i=self.pageLowerRange;i<self.index;i++){
+                //         self.pageRangeList[i]=self.pageLowerRange+i+1;
+                //     }
+                // }else{
+                //     for(i=0;i<self.pageRange;i++){
+                //         self.pageRangeList[i]=self.pageLowerRange+i+1;
+                //     }
+                // }
+
+                self.pageLowerRange = Math.floor((self.page-1)/self.pageRange)*self.pageRange;
+
+                if(self.pageLowerRange == Math.floor((self.index-1)/self.pageRange)*self.pageRange){
+                    for(let i=0; i<self.index-self.pageLowerRange; i++){
                         self.pageRangeList[i]=self.pageLowerRange+i+1;
                     }
                 }else{
-                    for(i=0;i<self.pageRange;i++){
+                    for(let i=0; i<self.pageRange; i++){
                         self.pageRangeList[i]=self.pageLowerRange+i+1;
                     }
                 }
@@ -152,6 +170,13 @@
                 self.page+=num;
                 self.fnList();
                 self.fnPageRange();
+            },
+
+            //每次调用选项的时候保证清空为1，否则每次都先显示fnList里面的页码
+            fnReset:function(){
+                let self = this;
+                self.page = 1;  
+                self.fnList();
             }
 
         }, // methods
@@ -160,7 +185,7 @@
             let self = this;
             self.fnList();
             self.fnSiList();
-            self.fnPageRange();
+            
             
         }
     });
