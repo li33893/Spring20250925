@@ -61,7 +61,7 @@
                 <!--在 Vue 3（和 Vue 2）里，v-for 不仅可以迭代数组，也可以迭代一个数字，并且从1开始-->
                 
                 <a href="javascript:;" @click="fnMove(-1)" v-if="page!=1" >👈</a>
-                    <a href="javascript:;" @click="page=num;fnlist()" v-for="num in index"> 
+                    <a href="javascript:;" @click="page=num;fnList()" v-for="num in pageRangeList"> 
                     <span :class="{active:page==num}">{{num}}</span>
                 </a>
                 <a href="javascript:;" @click="fnMove(+1)" v-if="page!=index" >👉</a>
@@ -134,17 +134,28 @@
                 let self=this;
                 self.pageRangeList=[];
 
-                self.pageLowerRange=floor(self.page/10);
+                self.pageLowerRange=Math.floor(self.page/10)*10;
                 for(i=1;i<=self.pageRange;i++){
                     self.pageRangeList[i]=self.pageLowerRange+i;
                 }
+                self.fnList();
+            },
+
+            fnMove:function(num){
+                let self=this;
+                self.page+=num;
+                self.fnList();
+                self.fnPageRange();
             }
+
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
             self.fnList();
             self.fnSiList();
+            self.fnPageRange();
+            
         }
     });
 
