@@ -108,6 +108,7 @@
                     success: function (data) {
                         self.list=data.list;
                         self.index=Math.ceil(data.cnt/self.pageSize);
+                        self.fnPageRange();
                     }
                 });
             },
@@ -128,17 +129,22 @@
                     }
                 });
             },
-            //现在的页数/10~现在的页数/10+10
-            //page/10
+            //现在的页数/10*10~现在的页数/10*10+10
             fnPageRange:function(){
                 let self=this;
                 self.pageRangeList=[];
 
                 self.pageLowerRange=Math.floor(self.page/10)*10;
-                for(i=1;i<=self.pageRange;i++){
-                    self.pageRangeList[i]=self.pageLowerRange+i;
+                if(self.pageLowerRange==Math.floor(self.index/10)*10){
+                    for(i=self.pageLowerRange;i<self.index;i++){
+                        self.pageRangeList[i]=self.pageLowerRange+i+1;
+                    }
+                }else{
+                    for(i=0;i<self.pageRange;i++){
+                        self.pageRangeList[i]=self.pageLowerRange+i+1;
+                    }
                 }
-                self.fnList();
+                
             },
 
             fnMove:function(num){
