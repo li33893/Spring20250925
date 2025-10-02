@@ -30,4 +30,13 @@ public interface BoardMapper {
 	int selectBoardCnt(HashMap<String, Object> map);
 	
 	int updateCnt(HashMap<String, Object> map);
+	
+	
+	int deleteBoardList(HashMap<String, Object> map);
+	
+	//upload img
+	int insertBoardImg(HashMap<String, Object> map);
+	
+	//file content
+	List <Board> selectFileList(HashMap<String, Object> map);
 }

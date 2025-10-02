@@ -48,6 +48,7 @@ public class BoardService {
 		System.out.println("service=>"+map);
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		int cnt= boardMapper.insertBoard(map);
+		resultMap.put("boardNo", map.get("boardNo"));
 		resultMap.put("result","success");
 		return resultMap;
 	}
@@ -64,8 +65,12 @@ public class BoardService {
 													//返回的结果给再装到board里面
 		
 		List <Comment> commentList=boardMapper.selectCommentList(map);
+		
+		List <Board> fileList=boardMapper.selectFileList(map);
+		
 		//2.返回过程	
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("fileList",fileList);
 		resultMap.put("info",board);
 		resultMap.put("commentList", commentList);
 		resultMap.put("result","sucess");
@@ -94,7 +99,19 @@ public class BoardService {
 	}
 	
 	
-	
+	public HashMap<String, Object> removeBoardList(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		System.out.println("service=>"+map);
+		int cnt=boardMapper.deleteBoardList(map);
+		resultMap.put("result","sucess");
+		return resultMap;
+	}
+
+	public void addBoardImg(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		int cnt= boardMapper.insertBoardImg(map);
+	}
 	
 
 	

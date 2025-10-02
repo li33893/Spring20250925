@@ -45,7 +45,7 @@
                     console.log(data);
                     if (data.result === "success") {
                         // 로그인 성공 시 페이지 전환
-                        //window.location.href = "stu-list.do";
+                        window.location.href = "board-list.do";
                     } else {
                         // 로그인 실패 시 경고 메시지 출력
                         alert(data.message);

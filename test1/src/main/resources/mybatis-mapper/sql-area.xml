@@ -4,9 +4,15 @@
 
 <mapper namespace="com.example.test1.mapper.AreaMapper">
 	<select id="selectareaList" parameterType="hashmap" resultType="com.example.test1.model.Area">
-		SELECT * FROM AREA WHERE GU IS NOT NULL AND DONG IS NOT NULL
+		SELECT * FROM AREA WHERE DONG IS NOT NULL AND GU IS NOT NULL
 	<if test="si != null and si != ''"> 
 		AND SI=#{si}
+	</if>
+	<if test="gu != null and gu != ''">
+		AND GU=#{gu}
+	</if>
+	<if test="dong != null and dong != ''">
+		AND DONG=#{dong}
 	</if>
 		OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
@@ -17,10 +23,22 @@
 	    <if test="si != null and si != ''"> 
 		AND SI=#{si}
 		</if>
+		<if test="gu != null and gu != ''"> 
+		AND GU=#{gu}
+		</if>
+
 	</select>
 	
 	<select id="selectSiList" parameterType="hashmap" resultType="com.example.test1.model.Area">
 	    SELECT * FROM AREA WHERE GU IS NULL
+	</select>
+	
+	<select id="selectGuList" parameterType="hashmap" resultType="com.example.test1.model.Area">
+	    SELECT * FROM AREA WHERE GU IS NOT NULL AND DONG IS NULL AND SI=#{si}
+	</select>
+	
+	<select id="selectDongList" parameterType="hashmap" resultType="com.example.test1.model.Area">
+	    SELECT * FROM AREA WHERE DONG IS NOT NULL AND GU=#{gu} AND SI=#{si}
 	</select>
 	
 	

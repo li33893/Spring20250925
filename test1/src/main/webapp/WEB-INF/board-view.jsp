@@ -31,12 +31,16 @@
                     <th>번호</th>
                     <th>제목</th>
                     <th>작성자</th>
+                    <th>내용</th>
                     <th>조회수</th>
                 </tr>
                 <tr>
                     <td>{{boardNo}}</td>
                     <td>{{info.title}}</td>
                     <td>{{info.userId}}</td>
+                    <td>{{info.contents}}
+                        <img v-for="item in fileList" :src="item.filePath">
+                    </td>
                     <td>{{info.cnt}}</td>
                 
 
@@ -54,10 +58,9 @@
                     <th>수정</th>
                 </tr>
                
-                <tr v-for="item in commentList">
-                    <td>{{item.nickName}}</td>
-                    <td>{{item.contents}}</td>
-
+                <tr v-for="comment in commentList">
+                    <td>{{comment.nickName}}</td>
+                    <td>{{comment.contents}}</td>
                     <td><button>삭제</button></td>
                     <td><button>수정</button></td>
                 </tr>
@@ -88,7 +91,9 @@
                 commentList:[],
                 content:"",
                 sessionId:"${sessionId}",
-                cnt:0
+                cnt:0,
+                fileList:[],
+                commentcontent:""
             };
         },
         methods: {
@@ -107,6 +112,7 @@
                         console.log(data);
                         self.info=data.info;
                         self.commentList=data.commentList;
+                        self.fileList=data.fileList;
 
                     }
                 });
@@ -116,7 +122,8 @@
                  let param = {
                     boardNo:self.boardNo,
                     content:self.content,
-                    id:self.sessionId
+                    id:self.sessionId,
+                    commentContent:self.commentContent,
                 };
 
                 $.ajax({

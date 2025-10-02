@@ -75,6 +75,19 @@ public class StuService {
 		resultMap.put("result","sucess");
 		return resultMap;
 	}
+	
+	
+	public HashMap<String, Object> removeStuList(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		System.out.println("service=>"+map);
+		int cnt=stuMapper.deleteStuList(map);
+		resultMap.put("result","sucess");
+		return resultMap;
+	}
+	
+	
+	
 
 
 	

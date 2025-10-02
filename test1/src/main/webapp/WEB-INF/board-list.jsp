@@ -64,6 +64,7 @@
         <div>
             <table>
                 <tr>
+                    <th v-if="status=='A'"><input type="checkbox" @click="fnSelectAll"></th>
                     <th>번호</th>
                     <th>제목</th>
                     <th>작성자</th>
@@ -73,6 +74,7 @@
                     <th>수정</th>
                 </tr>
                 <tr v-for="item in list">
+                    <td v-if="status=='A'"><input type="checkbox" :value="item.boardNo" v-model="selectItem" ></td>
                     <td>{{item.boardNo}}</td>
                     <td>
                         <!--有很多是后v-if更方便一些，其实也不用v-if，只要在某种条件下显示非转换的情况就用v-if就行-->
@@ -99,6 +101,7 @@
                 
             </div>
             <div><button @click="fnAdd()">글쓰기</button></div>
+            <div v-if="status=='A'"><button @click="fnRemoveAll">선택 삭제</button></div>
         </div>
 		
     </div>
@@ -124,9 +127,9 @@
                 keyWord:"",
                 pageSize:"5",//한페이지에 출력할 개수
                 page:1,//现在所在页面
-                index:0//최대 페이지 값
-                
-
+                index:0,//최대 페이지 값
+                selectItem:[],
+                flgAllChecked:false
 				
             };
         },
@@ -144,6 +147,7 @@
                     pageSize:self.pageSize,
                     
 				};
+                console.log(self.status);
                 $.ajax({
                     url: "board-list.dox",
                     dataType: "json",
@@ -160,11 +164,30 @@
 
             fnRemove:function(boardNo){
                 let self = this;
+
                 let param = {
                     boardNo:boardNo//这里只是变量，并不是声明的东西不能带self	
 				};
                 $.ajax({
                     url: "board-delete.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+						alert("삭제되었습니다");
+                        self.fnlist();
+						
+                    }
+                });
+            },
+
+            fnRemoveAll:function(){
+
+                let fList = JSON.stringify(self.selectItem);//把selectItem变成json形式
+                let param = {selectItem : fList};
+
+                $.ajax({
+                    url: "board/delete-list.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
@@ -196,6 +219,21 @@
                 let self=this;
                 self.page+=num;
                 self.fnlist();
+            },
+
+            fnSelectAll:function(){
+                let self=this;
+                self.flgAllChecked=!self.flgAllChecked;
+                if(self.flgAllChecked){
+                    self.selectItem=[];
+                    for(i=0;i<self.list.length;i++){
+                        self.selectItem.push(self.list[i].boardNo);
+                    }
+                }else{
+                    self.selectItem=[];
+                }
+                  
+
             }
 
         

@@ -34,6 +34,7 @@
         <div>
             <table>
                 <tr>
+                    <th><input type="checkbox" @click="fnSelectAll()"></th>
                     <th>학번</th>
                     <th>이름</th>
                     <th>학과</th>
@@ -43,6 +44,9 @@
                     <th>수정</th>
                 </tr>
                 <tr v-for="item in list">
+                    <td>
+                        <input type="checkbox" :value="item.stuNo" v-model="selectItem">
+                    </td>
                     <td>{{item.stuNo}}</td>
                     <td><a href="javascript:;" @click="fnView(item.stuNo)">{{item.stuName}}</a></td>
                     <td>{{item.stuDept}}</td>
@@ -53,6 +57,8 @@
                 </tr>
             </table>
         </div>
+
+        <div><button @click="fnAllRemove">삭제</button></div>
 		
     </div>
 </body>
@@ -63,7 +69,10 @@
         data() {
             return {
                 // 변수 - (key : value)
-                list:[]
+                list:[],
+                selectItem:[],
+                flgAllCheck:false,
+                keyWord:""
 				
             };
         },
@@ -119,6 +128,43 @@
                 });
             },
 
+            fnAllRemove:function(){
+                let self=this;
+                
+                let fList = JSON.stringify(self.selectItem);//把selectItem变成json形式
+                let param = {selectItem : fList};
+
+                $.ajax({
+                    url: "/stu/deleteList.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        alert("삭제되었습니다");
+                        self.fnlist();					
+                    }
+                });
+            },
+
+           
+            //全部选中/全部选中取消
+            fnSelectAll:function(){
+                let self=this;
+                //点击的瞬间变成true，然后依次交替
+                self.flgAllCheck=!self.flgAllCheck;
+                if(!self.flgAllCheck){
+                    self.selectItem=[];
+                }else{
+                    //防止已经选中的时候list里面又重复加入原来已经有的选项
+                    self.selectItem=[];
+                    for(i=0;i<self.list.length;i++){
+                    self.selectItem.push(self.list[i].stuNo);
+                    }
+                }
+                
+
+            },
+
             
             fnView:function(stuNo){
                 pageChange("stu-view.do",{stuNo:stuNo});
@@ -128,7 +174,9 @@
             fnEdit:function(stuNo){
                 pageChange("stu-edit.do",{stuNo:stuNo});
 
-            }
+            },
+
+        
 
         }, // methods
         mounted() {

@@ -33,11 +33,32 @@
         <div>
             도/특별시
             <!--???还是没太搞清楚重置的问题-->
-            <select v-model="si" @change="fnReset">
-                <option value="">전체</option>
+            <select v-model="si" @change="fnGuList">
+                <option value="">선택</option>
                 <option :value="item.si" v-for="item in siList">{{item.si}}</option>
             </select>
+
+             구:
+            <!--???还是没太搞清楚重置的问题-->
+            <select v-model="gu" @change="fnDongList">
+                <option value="">선택</option>
+                <option :value="item.gu" v-for="item in guList">{{item.gu}}</option>
+            </select>
+
+            
+             동:
+            <!--???还是没太搞清楚重置的问题-->
+            <select v-model="dong" >
+                <option value="">선택</option>
+                <option :value="item.dong" v-for="item in dongList">{{item.dong}}</option>
+            </select>
+
+            <button @click="fnList">검색</button>
         </div>
+
+        
+
+       
 
         <div>
             <table>
@@ -87,7 +108,11 @@
                 pageRangeList:[],
                 pageRange:10,
                 siList:[],
-                si:""//선택한 시 값
+                si:"",//선택한 시 값
+                gu:"",
+                dong:"",
+                guList:[],
+                dongList:[]
 
             };
         },
@@ -98,7 +123,10 @@
                 let param = {
                     offset:(self.page-1)*self.pageSize,
                     pageSize:self.pageSize,
-                    si:self.si
+                    si:self.si,
+                    gu:self.gu,
+                    dong:self.dong
+
                     
                 };
                 $.ajax({
@@ -117,9 +145,7 @@
 
             fnSiList: function () {
                 let self = this;
-                let param = {
-                    
-                    
+                let param = {           
                 };
                 $.ajax({
                     url: "/area/si.dox",
@@ -131,6 +157,45 @@
                     }
                 });
             },
+
+            fnGuList:function(){
+                let self = this;
+                let param = {     
+                    si:self.si      
+                };
+                $.ajax({
+                    url: "/area/gu.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        console.log(data);
+                        self.gu="";
+                        self.dong="";
+                        self.guList=data.list;
+                    }
+                });
+            },
+
+            fnDongList:function(){
+                let self = this;
+                let param = {     
+                    si:self.si,
+                    gu:self.gu      
+                };
+                $.ajax({
+                    url: "/area/dong.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        console.log(data);
+                        self.dong="";
+                        self.dongList=data.list;
+                    }
+                });
+            },
+
             //现在的页数/10*10~现在的页数/10*10+10
             fnPageRange:function(){
                 let self=this;
@@ -139,7 +204,7 @@
 
 
                 //!!!计算页码的时候一定要注意upperrange和lowerrange能不能正常出现在一页：
-                //？？？还是没搞懂为什么我这种算法的问题是10的倍数也会自动计算到下一组
+                //不-1的话10的倍数页面会跑到下一组
                 // self.pageLowerRange=Math.floor(self.page/self.pageRange)*self.pageRange;
                 // if(self.pageLowerRange==Math.floor(self.index/self.pageRange)*self.pageRange){
                 //     for(i=self.pageLowerRange;i<self.index;i++){
@@ -185,6 +250,7 @@
             let self = this;
             self.fnList();
             self.fnSiList();
+            
             
             
         }

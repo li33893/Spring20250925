@@ -13,6 +13,14 @@
 		DELETE FROM STUDENT WHERE STU_NO=#{stuNo}
 	</delete>
 	
+	
+	<delete id="deleteStuList"  parameterType="hashmap">
+		DELETE FROM STUDENT WHERE STU_NO IN
+		<foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
 	<select id="getStuView" parameterType="hashmap" resultType="com.example.test1.model.Student">
 		SELECT S.STU_NO, STU_NAME, STU_DEPT, NVL(AVG(ENR_GRADE),0) AS AVG_SCORE
 		FROM STUDENT S 

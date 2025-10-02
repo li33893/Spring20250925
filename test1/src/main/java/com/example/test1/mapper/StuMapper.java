@@ -15,5 +15,6 @@ public interface StuMapper{
 	 int updateStu(HashMap<String, Object> map);
 	 int deleteStu(HashMap<String, Object> map);
 	 Student stuInfo(HashMap<String, Object> map);
+	 int deleteStuList(HashMap<String, Object> map);
 	
 }
