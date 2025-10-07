@@ -20,78 +20,54 @@
         tr:nth-child(even){
             background-color: azure;
         }
-        .active{
-            color:black;
-            font-weight:bold;
+
+        .active {
+            color : black;
+            font-weight: bold;
         }
+        
+
+        a{
+            padding-right:5px;
+            text-decoration: none;
+        }
+
+        
     </style>
 </head>
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
-
         <div>
-            도/특별시
-            <!--???还是没太搞清楚重置的问题-->
             <select v-model="si" @change="fnGuList">
-                <option value="">선택</option>
-                <option :value="item.si" v-for="item in siList">{{item.si}}</option>
+                <option v-for="si in siList">{{si.si}}</option>
             </select>
-
-             구:
-            <!--???还是没太搞清楚重置的问题-->
             <select v-model="gu" @change="fnDongList">
-                <option value="">선택</option>
-                <option :value="item.gu" v-for="item in guList">{{item.gu}}</option>
+                <option v-for="gu in guList">{{gu.gu}}</option>
             </select>
-
-            
-             동:
-            <!--???还是没太搞清楚重置的问题-->
-            <select v-model="dong" >
-                <option value="">선택</option>
-                <option :value="item.dong" v-for="item in dongList">{{item.dong}}</option>
+            <select v-model="dong">
+                <option v-for="dong in dongList">{{dong.dong}}</option>
             </select>
-
-            <button @click="fnList">검색</button>
+            <button @click="fnAreaList">search</button>
         </div>
-
-        
-
-       
 
         <div>
             <table>
                 <tr>
-                    <th>시</th>
+                    <th>도,특별시시</th>
                     <th>구</th>
                     <th>동</th>
-                    <th>x</th>
-                    <th>y</th>
                 </tr>
-                <tr v-for="item in list">
-                    <td>{{item.si}}</td>
-                    <td>{{item.gu}}</td>
-                    <td>{{item.dong}}</td>
-                    <td>{{item.nx}}</td>
-                    <td>{{item.ny}}</td>
+                <tr v-for="area in areaList">
+                    <td>{{area.si}}</td>
+                    <td>{{area.gu}}</td>
+                    <td>{{area.dong}}</td>
                 </tr>
             </table>
         </div>
-
-         <div>
-                <!--在 Vue 3（和 Vue 2）里，v-for 不仅可以迭代数组，也可以迭代一个数字，并且从1开始-->
-                
-                <a href="javascript:;" @click="fnMove(-1)" v-if="page!=1" >👈</a>
-                    <a href="javascript:;" @click="page=num;fnList()" v-for="num in pageRangeList"> 
-                    <span :class="{active:page==num}">{{num}}</span>
-                </a>
-                <a href="javascript:;" @click="fnMove(+1)" v-if="page!=index" >👉</a>
-                
-            </div>
-                
+        <div><button @click="fnPre(num)">◀</button><a href="javascript:;" v-for="num in pageRangeList" @click="fnChange(num)" :class="{active:page == num}">{{num}}</a><button @click="fnNext(num)">▶</button></div>
+		
     </div>
-
 </body>
 </html>
 
@@ -100,161 +76,163 @@
         data() {
             return {
                 // 변수 - (key : value)
-                pageSize:"20",//한페이지에 출력할 개수
-                page:1,//现在所在页面
-                index:0,//최대 페이지 값
-                list:[],
-                pageLowerRange:0,
-                pageRangeList:[],
-                pageRange:10,
+                areaList:[],
+				keyWord:"",
                 siList:[],
-                si:"",//선택한 시 값
-                gu:"",
-                dong:"",
                 guList:[],
-                dongList:[]
-
+                dongList:[],
+                pageSize:20,
+                page:1,
+                pageNum:0,
+                totalRows:0,
+                pageRange:10,
+                pageRangeList:[],
+                si:"",
+                gu:"",
+                dong:""
+				
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnList: function () {
+            fnAreaList: function () {
                 let self = this;
                 let param = {
                     offset:(self.page-1)*self.pageSize,
-                    pageSize:self.pageSize,
+                    fetchRows:self.pageSize,
                     si:self.si,
                     gu:self.gu,
                     dong:self.dong
-
-                    
-                };
+	
+				};
                 $.ajax({
-                    url: "/area/list.dox",
+                    url: "/area-list.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        self.list=data.list;
-                        self.index=Math.ceil(data.cnt/self.pageSize);
-                        //？？没搞懂什么时候在哪里需要刷新
-                        self.fnPageRange();
+						console.log(data);
+                        self.areaList=data.list;
+                        self.totalRows=data.rowNum;
+                        self.pageNum=Math.ceil(self.totalRows/self.pageSize);
+                        self.fnpageRange();
+                        						
                     }
                 });
             },
 
-            fnSiList: function () {
+            fnSiList:function(){
                 let self = this;
-                let param = {           
-                };
+                let param = {
+				};
                 $.ajax({
-                    url: "/area/si.dox",
+                    url: "/si-list.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
+						console.log(data);
                         self.siList=data.list;
+						
                     }
                 });
+
             },
 
             fnGuList:function(){
                 let self = this;
-                let param = {     
-                    si:self.si      
-                };
+                //每次si改变的时候都要将后面的清空，否则会产生空值
+                self.gu="";
+                self.dong="";
+                let param = {
+                    si:self.si
+				};
                 $.ajax({
-                    url: "/area/gu.dox",
+                    url: "/gu-list.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        console.log(data);
-                        self.gu="";
-                        self.dong="";
+						console.log(data);
                         self.guList=data.list;
+                        self.fnAreaList();
+						
                     }
                 });
+
             },
 
             fnDongList:function(){
                 let self = this;
-                let param = {     
+                //每次si不变gu变的时候要让dong清空，否则会产生空值
+                self.dong="";
+                let param = {
                     si:self.si,
-                    gu:self.gu      
-                };
+                    gu:self.gu
+				};
                 $.ajax({
-                    url: "/area/dong.dox",
+                    url: "/dong-list.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        console.log(data);
-                        self.dong="";
+						console.log(data);
                         self.dongList=data.list;
+                        self.fnAreaList();
+						
                     }
                 });
+
             },
 
-            //现在的页数/10*10~现在的页数/10*10+10
-            fnPageRange:function(){
+            fnChange:function(num){
                 let self=this;
-                self.pageRangeList=[];
+                self.page=num;
+                self.fnAreaList();
+            },
 
-
-
-                //!!!计算页码的时候一定要注意upperrange和lowerrange能不能正常出现在一页：
-                //不-1的话10的倍数页面会跑到下一组
-                // self.pageLowerRange=Math.floor(self.page/self.pageRange)*self.pageRange;
-                // if(self.pageLowerRange==Math.floor(self.index/self.pageRange)*self.pageRange){
-                //     for(i=self.pageLowerRange;i<self.index;i++){
-                //         self.pageRangeList[i]=self.pageLowerRange+i+1;
-                //     }
-                // }else{
-                //     for(i=0;i<self.pageRange;i++){
-                //         self.pageRangeList[i]=self.pageLowerRange+i+1;
-                //     }
-                // }
-
-                self.pageLowerRange = Math.floor((self.page-1)/self.pageRange)*self.pageRange;
-
-                if(self.pageLowerRange == Math.floor((self.index-1)/self.pageRange)*self.pageRange){
-                    for(let i=0; i<self.index-self.pageLowerRange; i++){
-                        self.pageRangeList[i]=self.pageLowerRange+i+1;
-                    }
-                }else{
-                    for(let i=0; i<self.pageRange; i++){
-                        self.pageRangeList[i]=self.pageLowerRange+i+1;
-                    }
+            fnPre:function(){
+                let self=this;
+                if(self.page>1){
+                    self.page--;
                 }
+                self.fnAreaList();
+            },
+
+            fnNext:function(){
+                let self=this;
+                if(self.page<self.pageNum){
+                    self.page++;
+                }
+                self.fnAreaList();
                 
             },
 
-            fnMove:function(num){
+            fnpageRange:function(){
                 let self=this;
-                self.page+=num;
-                self.fnList();
-                self.fnPageRange();
-            },
-
-            //每次调用选项的时候保证清空为1，否则每次都先显示fnList里面的页码
-            fnReset:function(){
-                let self = this;
-                self.page = 1;  
-                self.fnList();
+                self.pageRangeList = [];  
+                //***0-9floor出来的才是一个数，想要1-10在一个区间就在0-9floor出来的基础上+1即可   
+                // 计算起始页
+                let startPage = Math.floor((self.page - 1) / self.pageRange) * self.pageRange + 1;
+                // 计算结束页
+                let endPage = Math.min(startPage + self.pageRange - 1, self.pageNum);//min(num1,num2)的意思是在两个数里面取更小的
+   
+                for(let i = startPage; i <= endPage; i++){
+                self.pageRangeList.push(i);
+                }
             }
 
-        }, // methods
+            
+            // methods
+        },
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
-            self.fnList();
+            self.fnAreaList();
             self.fnSiList();
-            
-            
-            
         }
     });
 
     app.mount('#app');
+
 </script>
