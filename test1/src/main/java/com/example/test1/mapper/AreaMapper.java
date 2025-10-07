@@ -11,18 +11,13 @@ import com.example.test1.model.Area;
 public interface AreaMapper {
 	
 	
-	List <Area> selectareaList(HashMap<String, Object> map);
+	List <Area> areaList (HashMap<String,Object> map);
 	
-
-	int selectAreaCnt(HashMap<String, Object> map);
+	int rowNum (HashMap<String,Object> map);
 	
-	
-	List <Area> selectSiList(HashMap<String, Object> map);
-	
-	
-	List <Area> selectGuList(HashMap<String, Object> map);
-	
-	List <Area> selectDongList(HashMap<String, Object> map);
+	List <Area> siList (HashMap<String,Object> map);
+	List <Area> guList (HashMap<String,Object> map);
+	List <Area> dongList (HashMap<String,Object> map);
 
 
 
