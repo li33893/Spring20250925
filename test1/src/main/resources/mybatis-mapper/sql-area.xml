@@ -3,42 +3,75 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.test1.mapper.AreaMapper">
-	<select id="selectareaList" parameterType="hashmap" resultType="com.example.test1.model.Area">
-		SELECT * FROM AREA WHERE DONG IS NOT NULL AND GU IS NOT NULL
-	<if test="si != null and si != ''"> 
-		AND SI=#{si}
-	</if>
-	<if test="gu != null and gu != ''">
-		AND GU=#{gu}
-	</if>
-	<if test="dong != null and dong != ''">
-		AND DONG=#{dong}
-	</if>
-		OFFSET #{offset} ROWS FETCH NEXT #{pageSize} ROWS ONLY
-	</select>
+	<mapper namespace="com.example.test1.mapper.AreaMapper">
+
+<!--
+Area a1 = new Area("경상북도", "영천시", "동부동", 95, 93);
+Area a2 = new Area("경상북도", "영천시", "중앙동", 95, 93);
+Area a3 = new Area("경상북도", "영천시", "서부동", 95, 93);
+
+然后
+
+List<Area> areaList = new ArrayList<>();
+
+areaList.add(a1);
+areaList.add(a2);
+areaList.add(a3);
 
 
-	<select id="selectAreaCnt" parameterType="hashmap" resultType="int">
-	    SELECT COUNT(*) FROM AREA WHERE GU IS NOT NULL AND DONG IS NOT NULL
-	    <if test="si != null and si != ''"> 
-		AND SI=#{si}
+最后生成：
+[
+  { si: "경상북도", gu: "영천시", dong: "동부동", nx: 95, ny: 93 },
+  { si: "경상북도", gu: "영천시", dong: "중앙동", nx: 95, ny: 93 },
+  { si: "경상북도", gu: "영천시", dong: "서부동", nx: 95, ny: 93 }
+]
+
+-->
+
+	<select id="areaList" parameterType="hashmap" resultType="com.example.test1.model.Area">
+		SELECT * FROM AREA
+		WHERE GU IS NOT NULL AND DONG IS NOT NULL
+		<if test="si != ''">
+			AND SI=#{si}
 		</if>
-		<if test="gu != null and gu != ''"> 
-		AND GU=#{gu}
+		<if test="gu != ''">
+			AND GU=#{gu}
 		</if>
-
+		<if test="dong != ''">
+			AND DONG=#{dong}
+		</if>
+		OFFSET #{offset} ROWS FETCH NEXT #{fetchRows} ROWS ONLY
 	</select>
 	
-	<select id="selectSiList" parameterType="hashmap" resultType="com.example.test1.model.Area">
-	    SELECT * FROM AREA WHERE GU IS NULL
+	<select id="rowNum" parameterType="hashmap" resultType="int">
+		SELECT COUNT(*) FROM AREA
+		WHERE GU IS NOT NULL AND DONG IS NOT NULL
+		<if test="si!=''">
+			AND SI=#{si}
+		</if>
+		<if test="gu!=''">
+			AND GU=#{gu}
+		</if>
+		<if test="dong!=''">
+			AND DONG=#{dong}
+		</if>
 	</select>
 	
-	<select id="selectGuList" parameterType="hashmap" resultType="com.example.test1.model.Area">
-	    SELECT * FROM AREA WHERE GU IS NOT NULL AND DONG IS NULL AND SI=#{si}
+	<select id="siList" parameterType="hashmap" resultType="com.example.test1.model.Area">
+		SELECT * FROM AREA
+		WHERE GU IS NULL
 	</select>
 	
-	<select id="selectDongList" parameterType="hashmap" resultType="com.example.test1.model.Area">
-	    SELECT * FROM AREA WHERE DONG IS NOT NULL AND GU=#{gu} AND SI=#{si}
+	<select id="guList" parameterType="hashmap" resultType="com.example.test1.model.Area">
+		SELECT * FROM AREA
+		WHERE GU IS NOT NULL AND DONG IS NULL
+		AND SI=#{si}
+	</select>
+	
+	<select id="dongList" parameterType="hashmap" resultType="com.example.test1.model.Area">
+		SELECT * FROM AREA
+		WHERE DONG IS NOT NULL
+		AND GU=#{gu} AND SI=#{si}
 	</select>
 	
 	
