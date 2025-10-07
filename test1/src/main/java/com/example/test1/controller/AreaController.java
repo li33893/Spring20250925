@@ -16,57 +16,67 @@ import com.google.gson.Gson;
 @Controller
 public class AreaController {
 	
+	//【返回】
 	@Autowired
 	AreaService areaService;
-
-	@RequestMapping("/area/list.do") 
-    public String areaList(Model model) throws Exception{
-		//这里的modelmodel也可以省略
-        return "/area/area-list";   
-	}
 	
-	@RequestMapping(value = "/area/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@RequestMapping("/area/list.do") 
+    public String getList(Model model) throws Exception{
+
+        return "/area/area-list";
+    }
+	
+	//【发送】:只做了两件事：找到方法，把参数给service的方法
+	//告诉spring，这个areaList方法是处理/area-list。dox的请求
+	//发送的时候的requestParam，也就是map是ajax里面的data里面的param
+	@RequestMapping(value = "/area-list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String areaList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	public String AreaList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = areaService.areaList(map);
+		//【发送】
+		//只是把map给service里的getAreaList
+		resultMap = areaService.getAreaList(map);
 		
-		System.out.println(map);
 		
 		return new Gson().toJson(resultMap);
 	}
 	
-	@RequestMapping(value = "/area/si.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	
+	@RequestMapping(value = "/si-list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String siList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	public String SiList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		//【发送】
+		//只是把map给service里的getAreaList
 		resultMap = areaService.getSiList(map);
 		
-		System.out.println(map);
 		
 		return new Gson().toJson(resultMap);
 	}
 	
-	@RequestMapping(value = "/area/gu.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/gu-list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String guList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	public String GuList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		//【发送】
+		//只是把map给service里的getAreaList
 		resultMap = areaService.getGuList(map);
 		
-		System.out.println(map);
 		
 		return new Gson().toJson(resultMap);
 	}
 	
-	@RequestMapping(value = "/area/dong.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/dong-list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String dongList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+	public String DongList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		//【发送】
+		//只是把map给service里的getAreaList
 		resultMap = areaService.getDongList(map);
 		
-		System.out.println(map);
 		
 		return new Gson().toJson(resultMap);
 	}
+
 
 }
