@@ -3,7 +3,6 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.test1.mapper.AreaMapper">
-	<mapper namespace="com.example.test1.mapper.AreaMapper">
 
 <!--
 Area a1 = new Area("경상북도", "영천시", "동부동", 95, 93);
