@@ -40,7 +40,7 @@
                     <th>삭제</th>
                 </tr>
                 <tr v-for="item in list">
-                    <td>{{item.boardN0}}</td>
+                    <td>{{item.boardNo}}</td>
                     <td>{{item.title}}</td>
                     <td>{{item.userId}}</td>
                     <td>{{item.cnt}}</td>
