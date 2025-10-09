@@ -105,7 +105,8 @@ public class StuController {
 	public String DeleteList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 
-		//为什么json是字符串还要再转一次字符串：因为默认的标注类型是obj，虽然是String，但是java只能看到地址值
+		//obj->string->list
+		//为什么json是字符串还要再转一次字符串：因为readValue的第一个参数一定是String，但是穿传过来的时候是按照obj传的
 		String json = map.get("selectItem").toString(); 
 
 		//创建jason解析器
