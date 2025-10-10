@@ -2,6 +2,8 @@ package com.example.test1.controller;
 
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +25,11 @@ public class MemberController{
         return "/member/member-login";   
 	}
 	
+	@RequestMapping("/mgr/member/list.do") 
+    public String mgr(Model model) throws Exception{
+        return "/mgr/member-list";   
+	}
+	
 	@RequestMapping("/member/join.do") 
     public String join(Model model) throws Exception{
         return "/member/member-join";   
@@ -31,6 +38,16 @@ public class MemberController{
 	@RequestMapping("/addr.do") 
     public String addr(Model model) throws Exception{
         return "/jusoPopup";   
+	}
+	
+
+	
+	@RequestMapping("/mgr/member/view.do")
+    public String view(HttpServletRequest request, Model model, @RequestParam HashMap<String, Object> map) throws Exception{
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();//多余
+		//把map里的boardNo值放到request里面去
+		request.setAttribute("userId",map.get("userId"));
+        return "/mgr/member-view";
 	}
 	
 	@RequestMapping(value = "/member/login.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -76,5 +93,35 @@ public class MemberController{
 		
 		return new Gson().toJson(resultMap);
 	}
+	
+	@RequestMapping(value = "/mgr/member/list.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String memberList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+
+		
+		resultMap = memberService.getMemberList(map);
+		
+		System.out.println(map);
+		
+		return new Gson().toJson(resultMap);
+	}
+	
+	@RequestMapping(value = "/mgr/remove-cnt.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String removeCnt(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+
+		
+		resultMap = memberService.unlockLogin(map);
+		
+		System.out.println(map);
+		
+		return new Gson().toJson(resultMap);
+	}
+	
+	
 }
 

@@ -1,6 +1,7 @@
 package com.example.test1.dao;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.test1.mapper.MemberMapper;
+import com.example.test1.model.Board;
 import com.example.test1.model.Member;
 
 @Service
@@ -23,17 +25,52 @@ public class MemberService {
 		
 		HashMap<String, Object> resultMap=new HashMap<String, Object>();
 		Member member=memberMapper.memberLogin(map);
-		String message=member != null?"로그인 성공!":"로그인 실패!";
-		String result=member != null?"success":"fail";
-		
-		if(member!=null) {
-			session.setAttribute("sessionId", member.getUserId());
-			session.setAttribute("sessionName", member.getName());
-			session.setAttribute("sessionStatus", member.getStatus());
+//		String message=member != null?"로그인 성공!":"로그인 실패!";
+//		String result=member != null?"success":"fail";
+		String msg="";
+		String result="";
+		if(member!=null && member.getCnt()>=5) {
+			msg="비밀번호를 5번 이상 잘못 입력하셨습니다";
+			result="fail";
+	
+		}else if (member!=null) {
+//				System.out.println(member.getName());
+//				System.out.println(member.getNickName());
+				msg="로그인 성공";
+				result="success";
+				int cnt=0;
+				session.setAttribute("sessionId", member.getUserId());
+				session.setAttribute("sessionName", member.getName());
+				session.setAttribute("sessionStatus", member.getStatus());
+				if(member.getStatus().equals("A")) {
+					memberMapper.cntInit(map);
+					resultMap.put("url", "/mgr/member/list.do");
+					
+				}else {
+					resultMap.put("url", "/main.do");
+				}
+				resultMap.put("result",result);
+		}else {
+			Member idCheck=memberMapper.memberCheck(map);
+			if(idCheck!=null) {
+				
+				if(idCheck.getCnt()>=5) {
+					msg="비밀번호를 5번 이상 잘못 입력하셨습니다";
+				}else {
+					//登录失败的时候cnt++的地方
+					msg="비밀번호를 다시 확인해주세요";
+					memberMapper.cntIncrease(map);
+				}
+				
+			}else {
+				msg="아이디가 존재하지 않습니다.";
+			}
 		}
 		
-		resultMap.put("msg",message);
+		
+		resultMap.put("msg",msg);
 		resultMap.put("result",result);
+		
 
 			
 		return resultMap;
@@ -84,5 +121,42 @@ public class MemberService {
 		}
 		return resultMap;
 	}
+	
+	public HashMap<String, Object> getMemberList(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			List <Member> memberList= memberMapper.memberList(map);
+			resultMap.put("memberList",memberList);
+			resultMap.put("result","sucess");
+		}catch(Exception e) {
+			resultMap.put("result","fail");
+			System.out.println(e.getMessage());
+			
+		}
+		
+		
+		
+		return resultMap;
+	}
+	
+	public HashMap<String, Object> unlockLogin(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		System.out.println("service=>"+map);
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			memberMapper.cntInit(map);
+			resultMap.put("result","success");
+		}catch(Exception e) {
+			resultMap.put("result","fail");
+			System.out.println(e.getMessage());
+			
+		}
+		
+		
+		
+		return resultMap;
+	}
+	
 
 }

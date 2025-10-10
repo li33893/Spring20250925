@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,19 +26,6 @@
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
-         <div>
-            <div>
-                <label >id <input type="text" v-model="id"></label>
-            </div>
-            <div>
-                <label >password <input type="password" v-model="pwd"></label>
-            </div>
-         </div>
-         <div>
-            <button @click="fnLogin">login</button>
-            <a href="/member/join.do"><button>signup</button></a>
-            
-        </div>
     </div>
 </body>
 </html>
@@ -47,39 +35,24 @@
         data() {
             return {
                 // 변수 - (key : value)
-                id:"",
-                pwd:""
+                userId:"${userId}"
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnLogin: function () {
+            fnList: function () {
                 let self = this;
-                let param = {
-                    id:self.id,
-                    pwd:self.pwd
-                };
+                let param = {};
                 $.ajax({
-                    url: "/member/login.dox",
+                    url: "",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        alert(data.msg);
-                        console.log(data);
-                        if(data.result=="success"){
-                            location.href=data.url;
-                        }
 
                     }
                 });
-            },
-
-            // fnFailCnt:function(){
-
-            // }
-
-
+            }
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
@@ -89,3 +62,6 @@
 
     app.mount('#app');
 </script>
+
+
+

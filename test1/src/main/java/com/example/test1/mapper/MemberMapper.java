@@ -14,5 +14,10 @@ public interface MemberMapper {
 	//id check
 	Member memberCheck ( HashMap <String, Object> map);
 	int memberAdd (HashMap <String, Object> map);
+	
+	List <Member> memberList(HashMap <String, Object> map);
+	
+	int cntInit(HashMap<String, Object> map);
+	int cntIncrease(HashMap<String, Object> map);
 
 }

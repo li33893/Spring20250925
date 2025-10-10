@@ -4,12 +4,19 @@ package com.example.test1.model;
 
 public class User {
 	private String userId;
+	private String passWord;
 	private String name;
 	private String email;
 	private String nickName;
 	private String gender;
 
 
+	public String getPassWord() {
+		return passWord;
+	}
+	public void setPassWord(String passWord) {
+		this.passWord = passWord;
+	}
 	public String getUserId() {
 		return userId;
 	}

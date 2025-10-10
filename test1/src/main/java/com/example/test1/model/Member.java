@@ -11,6 +11,11 @@ public class Member {
 	private String nickName;
 	private String status;
 	private String phone;
-	private String addr;
+	private String address;
 	private String gender;
+	private int cnt;
+	private String joinTime;
+	private String email;
+	private String dateofBirth;
+	
 }

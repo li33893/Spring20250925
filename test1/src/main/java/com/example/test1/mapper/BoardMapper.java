@@ -39,4 +39,6 @@ public interface BoardMapper {
 	
 	//file content
 	List <Board> selectFileList(HashMap<String, Object> map);
+	
+	
 }

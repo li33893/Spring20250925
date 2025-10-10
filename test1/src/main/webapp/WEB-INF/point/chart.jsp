@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,6 +8,8 @@
     <title>Document</title>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
     <style>
         table, tr, td, th{
             border : 1px solid black;
@@ -25,19 +28,24 @@
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
-         <div>
-            <div>
-                <label >id <input type="text" v-model="id"></label>
-            </div>
-            <div>
-                <label >password <input type="password" v-model="pwd"></label>
-            </div>
-         </div>
-         <div>
-            <button @click="fnLogin">login</button>
-            <a href="/member/join.do"><button>signup</button></a>
-            
-        </div>
+         <table>
+            <tr>
+                <th>아이디</th>
+                <th>이름</th>
+                <th>주소</th>
+                <th>성별</th>
+                <th>포인트</th>
+                <th>날짜</th>
+            </tr>
+            <tr v-for="customer in customerList">
+                <td>{{customer.userId}}</td>
+                <td>{{customer.name}}</td>
+                <td>{{customer.address}}</td>
+                <td>{{customer.gender}}</td>
+                <td>{{customer.apoint}}</td>
+                <td>{{customer.cdate}}</td>
+            </tr>
+         </table>
     </div>
 </body>
 </html>
@@ -47,45 +55,35 @@
         data() {
             return {
                 // 변수 - (key : value)
-                id:"",
-                pwd:""
+                customerList:[]
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnLogin: function () {
+            fnList: function () {
                 let self = this;
-                let param = {
-                    id:self.id,
-                    pwd:self.pwd
-                };
+                let param = {};
                 $.ajax({
-                    url: "/member/login.dox",
+                    url: "/point/list.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        alert(data.msg);
-                        console.log(data);
-                        if(data.result=="success"){
-                            location.href=data.url;
-                        }
+                        self.customerList=data.customerList;
 
                     }
                 });
-            },
-
-            // fnFailCnt:function(){
-
-            // }
-
-
+            }
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
+            self.fnList();
         }
     });
 
     app.mount('#app');
 </script>
+
+
+
