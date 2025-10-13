@@ -16,7 +16,7 @@
 				)
 		</if>
 		<if test="menuPart!=null and menuPart!=''">
-		 	AND F.PART_NO=#{menuPart}
+		 	AND F.MENU_PART=#{menuPart}
 		</if>
 		<if test="menuNo!=null and menuNo!=''">
 		 	AND F.MENU_NO=#{menuNo}
