@@ -98,9 +98,13 @@
 
                 fnSearch(){
                     let self=this;
-
+                    //！！！为什么不能直接清空：因为marker不是原始数据类型，而是对象
                     for(let i=0; i<self.markerList.length;i++){
-                    self.markerList[i].setMap(null);
+                        //setMap是marker底下的一个方法：
+                        //marker.setMap(map); // 지도에 올린다.
+                        //marker.setMap(null); // 지도에서 제거한다
+                        //marker.setMap(roadview); // 로드뷰에 올린다.
+                        self.markerList[i].setMap(null);
                     }
                     //先清空
                     self.markerList=[];
