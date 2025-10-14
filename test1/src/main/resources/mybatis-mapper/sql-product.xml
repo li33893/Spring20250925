@@ -16,7 +16,11 @@
 				)
 		</if>
 		<if test="menuPart!=null and menuPart!=''">
+<<<<<<< HEAD
 		 	AND F.MENU_PART= #{menuPart}
+=======
+		 	AND F.MENU_PART=#{menuPart}
+>>>>>>> branch 'main' of https://github.com/li33893/Spring20250925.git
 		</if>
 		<if test="menuNo!=null and menuNo!=''">
 		 	AND F.MENU_NO=#{menuNo}
