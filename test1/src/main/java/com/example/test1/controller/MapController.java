@@ -15,6 +15,12 @@ public class MapController {
 		
         return "/map/map1";   
 	}
+
+	@RequestMapping("/map2.do") 
+    public String overlayList(Model model) throws Exception{
+		
+        return "/map/map2";   
+	}
 	
 
 }
