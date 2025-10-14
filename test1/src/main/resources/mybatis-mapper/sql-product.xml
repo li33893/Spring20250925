@@ -6,7 +6,7 @@
 	
 	<select id="selectFoodList" parameterType="hashmap" resultType="com.example.test1.model.Product">
 		
-		SELECT FOOD_NAME,PRICE,FOOD_INFO,FILEPATH FROM TBL_FOOD F
+		SELECT F.FOOD_NO,FOOD_NAME,PRICE,FOOD_INFO,FILEPATH FROM TBL_FOOD F
 		INNER JOIN TBL_FOOD_IMG I ON I.FOOD_NO=F.FOOD_NO
 		WHERE 1=1
 		
@@ -16,10 +16,10 @@
 				)
 		</if>
 		<if test="menuPart!=null and menuPart!=''">
-		 	AND F.MENU_PART LIKE '%'||#{menuPart}||'%'
+		 	AND F.MENU_PART= #{menuPart}
 		</if>
 		<if test="menuNo!=null and menuNo!=''">
-		 	AND F.MENU_NO LIKE '%'||#{menuNo}||'%'
+		 	AND F.MENU_NO=#{menuNo}
 		</if>
 		
 	
@@ -33,16 +33,38 @@
 		 FROM TBL_MENU
 		 GROUP BY MENU_PART
 		)T ON M.MENU_NO=T.MENU_PART
+		<if test="depth!=null and depth!=''">
+		 	WHERE DEPTH=#{depth}
+		</if>
 	</select>
 	
-	<insert id="insertFood" parameterType="hashmap">
-	 	INSERT INTO TBL_FOOD VALUES(#)
+	<insert id="insertProduct" parameterType="hashmap" 
+			useGeneratedKeys="true" 
+			keyColumn="FOOD_NO" 
+			keyProperty="foodNo">
+	 	INSERT INTO TBL_FOOD VALUES(FOOD_SEQ.NEXTVAL,#{foodName},#{price},NULL,#{foodInfo},'Y',#{menuNo},#{menuPart})
 	</insert>
 
 	
 	<insert id="insertFoodImg" parameterType="hashmap">
-		INSERT INTO TBL_FOOD_FILE VALUES (FOODFILE_SEQ.NEXTVAL, #{foodNo}, #{filePath},#{fileName},#{fileOrgName},#{fileSize},#{filEtc},#{thumbNailYn})
+		INSERT INTO TBL_FOOD_IMG VALUES (FOODFILE_SEQ.NEXTVAL, #{foodNo}, #{path},#{filename},#{orgName},#{size},#{ext},'Y')
 	</insert>
+	
+	
+	<select id="selectFoodInfo" parameterType="hashmap" resultType="com.example.test1.model.Product">
+		SELECT F.FOOD_NAME,F.FOOD_NO,F.PRICE,F.FOOD_INFO,M.MENU_NAME AS FOODUPPERNAME,FILEPATH FROM TBL_FOOD F
+		INNER JOIN TBL_MENU M
+		ON M.MENU_NO=F.MENU_PART
+		INNER JOIN TBL_FOOD_IMG I ON F.FOOD_NO=I.FOOD_NO
+		WHERE F.FOOD_NO=#{foodNo}
+	</select>
+	
+	<select id="selectFileList" parameterType="hashmap" resultType="com.example.test1.model.Product">
+		SELECT *
+		FROM TBL_FOOD_IMG
+		WHERE FOOD_NO=#{foodNo}
+	</select>
+
 	
 </mapper>
 

@@ -13,6 +13,9 @@ public class Product {
 	private String sellYn;
 	private String filePath;
 	private String thumbNailYn;
+	private int menuPart;
+	private int menuNo;
+	private String foodUpperName;
 	
 	
 }

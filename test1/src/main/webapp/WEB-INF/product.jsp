@@ -10,6 +10,7 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <title>쇼핑몰 헤더</title>
     <link rel="stylesheet" href="/css/product-style.css">
+    <script src="/js/page-change.js"></script>
 </head>
 
 <body>
@@ -60,8 +61,8 @@
                 </ul>
             </nav>
             <div class="search-bar">
-                <input type="text" placeholder="상품을 검색하세요..." @keyup.enter="fnList" v-model="keyWord">
-                <button @click="fnList">검색</button>
+                <input type="text" placeholder="상품을 검색하세요..." @keyup.enter="fnList('','')" v-model="keyWord">
+                <button @click="fnList('','')">검색</button>
             </div>
             <div class="login-btn">
                 <button>로그인</button>
@@ -74,7 +75,7 @@
 
                  <div class="product-item" v-for="food in foodList">
                     <img :src="food.filePath" alt="제품 1">
-                    <h3>{{food.foodName}}</h3>
+                    <h3><a href="javascript:;" @click="fnView(food.foodNo)">{{food.foodName}}</a></h3>
                     <p>{{food.foodInfo}}</p>
                     <p class="price">₩{{food.price.toLocaleString()}}</p>
                 </div>
@@ -90,7 +91,8 @@
             return {
                 foodList:[],
                 keyWord:"",
-                menuList:[]
+                menuList:[],
+                foodNo:""
 
             };
         },
@@ -115,11 +117,16 @@
 
                     }
                 });
-            }
+            },
+            fnView:function(foodNo){
+                
+                pageChange("/product/view.do",{foodNo:foodNo});
+
+            },
         },
         mounted() {
             var self = this;
-            self.fnList();
+            self.fnList('','');
         }
     });
     app.mount('#app');
