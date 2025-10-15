@@ -50,6 +50,11 @@ public class MemberController{
         return "/mgr/member-view";
 	}
 	
+	@RequestMapping("/member/pwd.do") 
+    public String pwd(Model model) throws Exception{
+        return "/member/pwd";   
+	}
+	
 	@RequestMapping(value = "/member/login.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String boardList(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
@@ -116,6 +121,29 @@ public class MemberController{
 
 		
 		resultMap = memberService.unlockLogin(map);
+		
+		System.out.println(map);
+		
+		return new Gson().toJson(resultMap);
+	}
+	
+	@RequestMapping(value = "/member/search.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String search(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap =memberService.SearchMember(map);
+		
+		System.out.println(map);
+		
+		return new Gson().toJson(resultMap);
+	}
+	
+	
+	@RequestMapping(value = "/member/updatepwd.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String updatePwd(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap =memberService.UpdatePwd(map);
 		
 		System.out.println(map);
 		

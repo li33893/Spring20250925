@@ -13,14 +13,12 @@ public class MapController {
 	@RequestMapping("/map.do") 
     public String pointList(Model model) throws Exception{
 		
-        return "/map/map1";   
+        return "/map/map4";   
 	}
+	
+	
 
-	@RequestMapping("/map2.do") 
-    public String overlayList(Model model) throws Exception{
-		
-        return "/map/map2";   
-	}
+	
 	
 
 }

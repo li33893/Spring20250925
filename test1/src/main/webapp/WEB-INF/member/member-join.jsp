@@ -67,8 +67,8 @@
             <div>
                 핸드폰 번호:
                 <!--oninput会在用户输入的时候触发-->
-                <input class="phone" v-model="phone1" maxlength="3" size="3" oninput="moveNext(this, 'phone2')">-
-                <input class="phone" v-model="phone2" maxlength="4" size="4" oninput="moveNext(this, 'phone3')">-
+                <input class="phone" v-model="phone1" maxlength="3" size="3" >-
+                <input class="phone" v-model="phone2" maxlength="4" size="4" >-
                 <input class="phone" v-model="phone3" maxlength="4" size="4">
             </div>
 

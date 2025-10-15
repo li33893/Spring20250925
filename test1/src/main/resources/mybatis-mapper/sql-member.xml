@@ -6,7 +6,8 @@
 	<select id="memberLogin" parameterType="hashmap" resultType="com.example.test1.model.Member">
 		SELECT *
 		FROM TBL_USER
-		WHERE USERID = #{id} AND PASSWORD = #{pwd}
+		WHERE USERID = #{id} 
+		<!--AND PASSWORD = #{pwd}-->
 	</select>
 	
 	
@@ -17,9 +18,15 @@
 		WHERE USERID = #{id}
 	</select>
 	
+	<select id="memberSearch" parameterType="hashmap" resultType="com.example.test1.model.Member">
+		SELECT *
+		FROM TBL_USER
+		WHERE USERID = #{userId} AND NAME=#{name} AND REPLACE(PHONE,'-','')=REPLACE(#{phone},'-','')
+	</select>
+	
 	
 	<insert id="memberAdd" parameterType="hashmap">
-		INSERT INTO TBL_USER VALUES (#{id}, #{pwd}, #{name},NULL,NULL,NULL, #{addr},#{phone},NULL,#{gender},#{status},SYSDATE,SYSDATE)
+		INSERT INTO TBL_USER VALUES (#{id}, #{hashPwd}, #{name},NULL,NULL,NULL, #{addr},#{phone},NULL,#{gender},#{status},SYSDATE,SYSDATE,0)
 	</insert>
 	
 	
@@ -39,6 +46,22 @@
 			SET CNT=0
 			WHERE USERID=#{id}
 	</update>
+	
+	<update id="pwdUpdate" parameterType="hashmap">
+		UPDATE TBL_USER 
+		SET PASSWORD=#{hashPwd}
+		WHERE USERID=#{userId}
+	</update>
+	
+	<select id="pwdCheck" parameterType="hashmap">
+		SELECT COUNT(*)
+		FROM TBL_USER
+		WHERE USERID = #{userId} AND PASSWORD=#{hashPwd}
+	</select>
+	
+	
+
+	
 	
 	
 </mapper>

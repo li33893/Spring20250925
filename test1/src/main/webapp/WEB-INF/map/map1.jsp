@@ -125,10 +125,10 @@
             //2.1地图本图（容器）
             var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
             //2.2地图初始化的配置
-            mapOption = {
-                center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표//逗号是为了一个var可以声明多个变量
-                level: 3 // 지도의 확대 레벨
-            };  
+                mapOption = {
+                    center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표//逗号是为了一个var可以声明多个变量
+                    level: 3 // 지도의 확대 레벨
+                };  
             //2.3生成地图 
             self.map = new kakao.maps.Map(mapContainer, mapOption); 
 

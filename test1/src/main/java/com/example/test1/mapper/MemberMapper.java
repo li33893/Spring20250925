@@ -19,5 +19,12 @@ public interface MemberMapper {
 	
 	int cntInit(HashMap<String, Object> map);
 	int cntIncrease(HashMap<String, Object> map);
+	
+	
+	Member memberSearch ( HashMap <String, Object> map);
+	
+	int pwdUpdate(HashMap <String, Object> map);
+	
+	int pwdCheck(HashMap <String, Object> map);
 
 }
