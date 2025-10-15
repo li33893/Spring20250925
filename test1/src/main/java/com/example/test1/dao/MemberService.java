@@ -35,48 +35,37 @@ public class MemberService {
 		String result="";
 		
 		
-		//-----------this is after hashpwd-------------------------
-		System.out.println(member);
-		if(member!=null) {
-			//id存在，比较pwd之前
-			//从map中获取用户的哈希密码密码key，然后和后台的哈希密码比较
-			Boolean loginFlg=passwordEncoder.matches((String) map.get("pwd"), member.getPassWord());
-			System.out.println(loginFlg);
-			
-			if(loginFlg) {
-				if(member.getCnt()>=5) {
-					msg="비밀번호를 5번 이상 잘못 입력하셨습니다";
-					result="fail";
-					
-				}else {
-					msg="로그인 성공";
-					result="success";
-					int cnt=0;
-					session.setAttribute("sessionId", member.getUserId());
-					session.setAttribute("sessionName", member.getName());
-					session.setAttribute("sessionStatus", member.getStatus());
-					if(member.getStatus().equals("A")) {
-							memberMapper.cntInit(map);
-							resultMap.put("url", "/mgr/member/list.do");
-							
-					}else {
-							resultMap.put("url", "/main.do");
-					}
-				}
-			}else {
-				
-				//登录失败的时候cnt++的地方
-				msg="비밀번호를 다시 확인해주세요";
-				memberMapper.cntIncrease(map);
-				result="fail";
-				
-			}
-		}else {
-			//id不存在
-			
-			msg="아이디가 존재하지 않습니다.";
-			result="fail";
-			
+	//-----------this is after hashpwd-------------------------
+		//！！！！这里不能写成if（member），这是js的用法
+		if (member != null) {
+		    Boolean loginFlg = passwordEncoder.matches((String) map.get("pwd"), member.getPassWord());
+		    //应该先判断密码对不对再去判断cnt，否则会提前停止cnt计数
+		    if (loginFlg) {
+		        if (member.getCnt() >= 5) {
+		            msg = "비밀번호를 5번 이상 잘못 입력하셨습니다";
+		            result = "fail";
+		        } else {
+		            msg = "로그인 성공";
+		            result = "success";
+		            session.setAttribute("sessionId", member.getUserId());
+		            session.setAttribute("sessionName", member.getName());
+		            session.setAttribute("sessionStatus", member.getStatus());
+
+		            if (member.getStatus().equals("A")) {
+		                memberMapper.cntInit(map);
+		                resultMap.put("url", "/mgr/member/list.do");
+		            } else {
+		                resultMap.put("url", "/main.do");
+		            }
+		        }
+		    } else {
+		        msg = "비밀번호를 다시 확인해주세요";
+		        memberMapper.cntIncrease(map);
+		        result = "fail";
+		    }
+		} else {
+		    msg = "아이디가 존재하지 않습니다.";
+		    result = "fail";
 		}
 		
 		
@@ -175,11 +164,9 @@ public class MemberService {
 	public HashMap<String, Object> memberInsert(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub		
 		
-//！！！问问同桌这里是不是应该哈希化，是不是根本就没有相关代码，为啥我的xml标了hashpwd老师的没有
-//		//先传哈希后的密码：
-//		//别忘了传过来的pwd要强行string一下
-//		String hashPwd = passwordEncoder.encode((String)map.get("pwd"));
-//		map.put("hashPwd", hashPwd);
+
+		String hashPwd = passwordEncoder.encode((String)map.get("pwd"));
+		map.put("hashPwd", hashPwd);
 		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
