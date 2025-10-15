@@ -168,20 +168,34 @@ public class MemberService {
 		return resultMap;
 		
 	}
+
+
+	
 	
 	public HashMap<String, Object> memberInsert(HashMap<String, Object> map) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub		
+		
+//！！！问问同桌这里是不是应该哈希化，是不是根本就没有相关代码，为啥我的xml标了hashpwd老师的没有
+//		//先传哈希后的密码：
+//		//别忘了传过来的pwd要强行string一下
+//		String hashPwd = passwordEncoder.encode((String)map.get("pwd"));
+//		map.put("hashPwd", hashPwd);
+		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
 		System.out.println("service=>"+map);
 		int cnt= memberMapper.memberAdd(map);
 		if(cnt<1) {
 			resultMap.put("result","fail");
 		}else {
-			resultMap.put("result","sucess");
+			//！！！以后明明不报错后台插入成功了还出现fail，先怀疑是不是自己的success打错了
+			resultMap.put("result","success");
 		}
 		return resultMap;
 	}
 	
+
+
 	
 	public HashMap<String, Object> getMemberList(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
