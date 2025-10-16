@@ -7,11 +7,27 @@
    		SELECT B.*,TO_CHAR(CDATETIME,'YYYY-MM-DD') AS CDATE,
    		TO_CHAR(UDATETIME,'YYYY-MM-DD') AS UDATE 
    		FROM TBL_BBS B
+   		WHERE 1=1
+   		<if test="option=='all'">
+   			AND (
+				TITLE LIKE '%'||#{keyWord}||'%' OR CONTENTS LIKE '%'||#{keyWord}||'%'
+				)
+   		</if>
+   		<if test="option=='title'">
+   			AND TITLE LIKE '%'||#{keyWord}||'%'
+   		</if>
+   		<if test="option=='contents'">
+   			AND CONTENTS LIKE '%'||#{keyWord}||'%'
+   		</if>
 		ORDER BY BBS_NUM DESC
+		OFFSET #{offset} ROWS FETCH NEXT #{fetchRows} ROWS ONLY
 	</select>
 	
-	<insert id="bbsInsert" parameterType="hashmap" >
-   		INSERT INTO TBL_BBS VALUES(BBS_SEQ.NEXTVAL,#{title},#{contents},0,#{userId},SYSDATE,SYSDATE)
+	<insert id="bbsInsert" parameterType="hashmap"  
+			useGeneratedKeys="true" 
+			keyColumn="BBS_NUM" 
+			keyProperty="BBS_NUM">
+   		INSERT INTO TBL_BBS VALUES(BBS_SEQ.NEXTVAL,#{title},'',0,#{userId},SYSDATE,SYSDATE,#{contents})
 	</insert>
 	
 	<delete id="bbsListDelete"  parameterType="hashmap">
@@ -29,15 +45,37 @@
 		WHERE BBS_NUM = #{bbsNum}
 	</select>
 	
+	<update id="bbsUpdate" parameterType="hashmap">
+		UPDATE TBL_BBS SET TITLE=#{title},CONTENTS=#{contents}
+		WHERE BBS_NUM=#{bbsNum}
+	</update>
 	
+	<select id="bbsCount" parameterType="hashmap" resultType="int">
+   		SELECT COUNT(*) AS TOTAL_ROWS
+   		FROM TBL_BBS
+   		WHERE 1=1
+   		<if test="option=='all'">
+   			AND (
+				TITLE LIKE '%'||#{keyWord}||'%' OR CONTENTS LIKE '%'||#{keyWord}||'%'
+				)
+   		</if>
+   		<if test="option=='title'">
+   			AND TITLE LIKE '%'||#{keyWord}||'%'
+   		</if>
+   		<if test="option=='contents'">
+   			AND CONTENTS LIKE '%'||#{keyWord}||'%'
+   		</if>
+	</select>
 	
+	<insert id="bbsImgInsert" parameterType="hashmap">
+		INSERT INTO TBL_BBS_FILE VALUES (FILE_SEQ.NEXTVAL, #{bbsNum}, #{path},#{filename},#{orgName},#{size},#{ext})
+	</insert>
 	
+	<select id="fileListSelect" parameterType="hashmap" resultType="com.example.test1.model.BBS">
+		SELECT *
+		FROM TBL_BBS_FILE
+		WHERE BOARDNO=#{bbsNum}
+	</select>
 	
-	
-
-
-
-
-
 	
 </mapper>
