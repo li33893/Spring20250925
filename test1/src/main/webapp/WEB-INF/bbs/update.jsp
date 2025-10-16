@@ -91,7 +91,10 @@
             fnBBSUpdate: function () {
                 let self = this;
                 let param = {
-                    bbsNum:self.bbsNum
+                    bbsNum:self.bbsNum,
+                    title:self.title,
+                    contents:self.contents
+
                 };
                 $.ajax({
                     url: "/bbs/update.dox",
@@ -99,11 +102,13 @@
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        self.bbs=data.bbs;
+                        alert("수정되었습니다.");
                         
                     }
                 });
             },
+
+            
            
             
 
