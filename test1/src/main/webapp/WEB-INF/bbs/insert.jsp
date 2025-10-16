@@ -41,15 +41,13 @@
                 <table>
                     <tr>
                         <th>제목</th>
-                        <th>작성자</th>
-                        <th>파일첨부</th>
                         <th>내용</th>
+                        <th>작성자</th>
                     </tr>
                     <tr>
                         <td><input type="text" v-model="title"></td>
+                        <td><input type="text" v-model="contents"></td>
                         <td><input type="text" v-model="userId" readonly></td>
-                        <td><input type="file" id="file1" name="file1" accept=".jpg, .png"></td>
-                        <td><div id="editor" ></div></td>
                     </tr>
                 </table>
                 <div><button @click="fnInsert()">삽입</button></div>
@@ -65,16 +63,11 @@
             data() {
                 return {
                     // 변수 - (key : value)
-                    userId: "${sessionId}",
-                    boardNo: "",
+                    sessionId: "${sessionId}",
+                    userId:"${sessionId}",
                     title: "",
-                    cnt: 0,
-                    list: [],
-                    kind: "",
-                    option: "boardNo",
                     contents: "",
-                    sessionid: "${sessionId}",
-                    contents2:""
+                  
                 };
             },
             methods: {
@@ -83,46 +76,20 @@
                     let self = this;
                     let param = {
                         userId: self.userId,
-                        content: self.contents,
+                        contents: self.contents,
                         title: self.title
                     };
                     $.ajax({
-                        url: "board-add.dox",
+                        url: "/bbs/insert.dox",
                         dataType: "json",
                         type: "POST",
                         data: param,
                         success: function (data) {
                             alert("삽입되었습니다.");
-                            console.log(data.boardNo);
-                            var form = new FormData();
-                            form.append("file1", $("#file1")[0].files[0]);
-                            form.append("boardNo", data.boardNo); // 임시 pk
-                            self.upload(form);
-                            // location.href="board-list.do";
-                        }
-                    });
-                },
-                upload: function (form) {
-                    var self = this;
-                    $.ajax({
-                        url: "/fileUpload.dox"
-                        , type: "POST"
-                        , processData: false
-                        , contentType: false
-                        , data: form
-                        , success: function (data) {
-                            console.log(data);
-
                         }
                     });
                 }
-
-
-
-
-
-
-
+                
             }, // methods
             mounted() {
                 // 처음 시작할 때 실행되는 부분
@@ -132,27 +99,8 @@
                     location.href = "/member/login.do";
                 }
 
-                // Quill 에디터 초기화
-                var quill = new Quill('#editor', {
-                    theme: 'snow',
-                    modules: {
-                        toolbar: [
-                            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                            ['bold', 'italic', 'underline'],
-                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                            ['link', 'image'],
-                            ['clean']
-                        ]
-                    }
-                });
-
-        // 에디터 내용이 변경될 때마다 Vue 데이터를 업데이트
-                quill.on('text-change', function() {
-                    self.contents = quill.root.innerHTML;
-                });
-
+                
             }
-            
         });
 
         app.mount('#app');

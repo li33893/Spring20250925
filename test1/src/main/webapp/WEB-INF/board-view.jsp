@@ -38,8 +38,9 @@
                     <td>{{boardNo}}</td>
                     <td>{{info.title}}</td>
                     <td>{{info.userId}}</td>
-                    <td>{{info.contents}}
+                    <td>{{info.content}}
                         <img v-for="item in fileList" :src="item.filePath">
+                        <div v-html="info.contents2"></div>
                     </td>
                     <td>{{info.cnt}}</td>
                 
@@ -71,7 +72,10 @@
         <table id="input">
             <th>댓글 입력</th>
             <td>
-                <textarea cols="40" rows="4" v-model="content"></textarea>
+                <textarea cols="40" rows="4" v-model="content">
+                    <br>
+                    <div ></div>
+                </textarea>
             </td>
             <td><button @click="fnAddComment">저장</button></td>
         </table>
@@ -93,7 +97,8 @@
                 sessionId:"${sessionId}",
                 cnt:0,
                 fileList:[],
-                commentcontent:""
+                commentcontent:"",
+                
             };
         },
         methods: {

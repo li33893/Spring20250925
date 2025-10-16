@@ -207,7 +207,7 @@
                     location.href="/member/login.do";
                     return;
                 }
-                location.href="board-add.do"
+                location.href="board-add.do";
             },
 
             fnView:function(boardNo){

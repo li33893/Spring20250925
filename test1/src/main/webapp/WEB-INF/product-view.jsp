@@ -7,6 +7,7 @@
     <title>Document</title>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
     <style>
        
         #board table, tr, td, th{
@@ -68,6 +69,15 @@
                         {{Info.price}}
                     </td>
                 </tr>
+
+                <tr>
+                    <th>
+                        개수
+                    </th>
+                    <td>
+                        <input v-model="num">
+                    </td>
+                </tr>
                 <tr>
                     <th>
                         이미지
@@ -77,6 +87,10 @@
                     </td>
                 </tr>
             </table>
+
+            <div>
+                <button @click="fnPayment">주문하기</button>
+            </div>
         </div> 
 
 
@@ -86,13 +100,17 @@
 </html>
 
 <script>
+    IMP.init("imp12485203");
     const app = Vue.createApp({
         data() {
             return {
                 // 변수 - (key : value)
                 foodNo:"${foodNo}",
+                sessionId:"${sessionId}",
                 Info:{},
-                fileList:[]
+                fileList:[],
+                num:0,
+                paymentList:[]
             };
         },
         methods: {
@@ -114,7 +132,55 @@
 
                     }
                 });
+            },
+
+            fnPayment:function(){
+                let self=this;
+                IMP.request_pay({
+				    pg: "html5_inicis",
+				    pay_method: "card",
+				    merchant_uid: "merchant_"+new Date().getTime(),
+				    name: self.Info.foodName,
+				    amount: 1,//这里指的是价格
+				    buyer_tel: "010-0000-0000",
+                    
+				  }	, function (rsp) { // callback
+			   	      if (rsp.success) {
+
+			   	        // 결제 성공 시
+						console.log(rsp);
+                        self.fnPayHistory(rsp.merchant_uid,rsp.amount);
+			   	      } 
+		   	  	});
+                
+            },
+
+            fnPayHistory:function(uid,amount){
+                let self=this;
+                let param={
+                    foodNo:self.foodNo,
+                    uid:uid,
+                    amount:amount,
+                    sessionId:self.sessionId
+                }
+                $.ajax({
+                    url: "/history/insert.dox",
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    success: function (data) {
+                        if(data.result=="success"){
+                            alert("결제가 성공되었습니다.");
+                        }else{
+                            alert("결제가 실패되었습니다.")
+                        }
+
+                    }
+                });
+
             }
+
+           
 
         }, // methods
         mounted() {

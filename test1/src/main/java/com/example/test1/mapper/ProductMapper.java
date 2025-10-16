@@ -25,5 +25,9 @@ public interface ProductMapper {
 	
 	List <Product> selectFileList(HashMap<String, Object> map);
 	
+	
+
+	int historyInsert(HashMap<String, Object> map);
+	
 
 }

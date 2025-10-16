@@ -38,6 +38,7 @@
             <a href="/member/join.do"><button>signup</button></a>
             <a href="/member/pwd.do"><button>비밀번호 찾기</button></a>
             
+            
         </div>
     </div>
 </body>

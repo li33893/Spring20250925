@@ -8,31 +8,48 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <style>
-        table, tr, td, th{
+       
+        #board table, tr, td, th{
             border : 1px solid black;
             border-collapse: collapse;
             padding : 5px 10px;
-            text-align: center;
         }
         th{
             background-color: beige;
         }
-        tr:nth-child(even){
-            background-color: azure;
+        input{
+            width: 350px;
         }
     </style>
 </head>
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
-         {{sessionName}},welcome!this is main
          <div>
-            <a href="/board-list.do"><button>목록으로</button></a>
-            <button @click="fnLogout">logout</button>
-            <a href="/product.do"><button>상품 목록 페이지로</button></a>
-            <a href="/bbs/list.do"><button>bbs 목록 페이지로</button></a>
+            <table>
+                <tr>
+                    <th>제목</th>
+                    <th>내용</th>
+                    <th>조회수</th>
+                    <th>작성일</th>
+                </tr>
+                <tr>
+                    <td><input type="text" v-model="title"></td>
+                    <td><input type="text" v-model="contents"></td>
+                    <td>{{bbs.hit}}</td>
+                    <td>{{bbs.cdate}}</td>
+                </tr>
+            </table>
          </div>
-         
+
+         <div>
+            <button @click="fnBBSUpdate">
+                수정
+            </button>
+         </div>
+
+
+        
     </div>
 </body>
 </html>
@@ -42,46 +59,60 @@
         data() {
             return {
                 // 변수 - (key : value)
+                bbsNum:"${bbsNum}",
+                bbs:{},
                 sessionId:"${sessionId}",
-                sessionName:"${sessionName}",
-                sessionStatus:"${sessionStatus}"
+                userId:"${sessionId}",
+                title:"",
+                contents:"",
+                hit:0,
+                cdate:""     
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
-            fnList: function () {
+            fnBBS: function () {
                 let self = this;
-                let param = {};
+                let param = {
+                    bbsNum:self.bbsNum
+                };
                 $.ajax({
-                    url: "",
+                    url: "/bbs/view.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-
+                        self.bbs=data.bbs;
+                        self.title=self.bbs.title;
+                        self.contents=self.bbs.contents;    
                     }
                 });
             },
-            fnLogout:function(){
+            fnBBSUpdate: function () {
                 let self = this;
-                let param = {};
+                let param = {
+                    bbsNum:self.bbsNum
+                };
                 $.ajax({
-                    url: "/member/logout.dox",
+                    url: "/bbs/update.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
-                        alert(data.msg);
-                        location.href="/member/login.do"
-
+                        self.bbs=data.bbs;
+                        
                     }
                 });
             },
+           
             
+
         }, // methods
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
+            self.fnBBS();
+            
         }
     });
 

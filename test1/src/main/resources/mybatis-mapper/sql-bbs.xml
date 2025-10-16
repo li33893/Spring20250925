@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.test1.mapper.BbsMapper">
+	<select id="bbsListSelect" parameterType="hashmap" resultType="com.example.test1.model.BBS">
+   		SELECT B.*,TO_CHAR(CDATETIME,'YYYY-MM-DD') AS CDATE,
+   		TO_CHAR(UDATETIME,'YYYY-MM-DD') AS UDATE 
+   		FROM TBL_BBS B
+		ORDER BY BBS_NUM DESC
+	</select>
+	
+	<insert id="bbsInsert" parameterType="hashmap" >
+   		INSERT INTO TBL_BBS VALUES(BBS_SEQ.NEXTVAL,#{title},#{contents},0,#{userId},SYSDATE,SYSDATE)
+	</insert>
+	
+	<delete id="bbsListDelete"  parameterType="hashmap">
+		DELETE FROM TBL_BBS WHERE BBS_NUM IN
+		<foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	
+	<select id="bbsSelect" parameterType="hashmap" resultType="com.example.test1.model.BBS">
+		SELECT B.*,
+		TO_CHAR(CDATETIME,'YYYY-MM-DD') AS CDATE
+		FROM TBL_BBS B
+		WHERE BBS_NUM = #{bbsNum}
+	</select>
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+	
+</mapper>

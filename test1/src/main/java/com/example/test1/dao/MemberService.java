@@ -251,7 +251,7 @@ public class MemberService {
 		try {
 			Member member=memberMapper.memberLogin(map);
 			Boolean pwdFlg=passwordEncoder.matches((String) map.get("pwd"),member.getPassWord());
-			if(pwdFlg) {
+			if(pwdFlg==true) {
 				resultMap.put("result","fail");
 				resultMap.put("msg","기존 비밀번호와 동일합니다");
 				

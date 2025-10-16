@@ -112,6 +112,21 @@ public class ProductService {
 		
 		return resultMap;
 	}
+	
+	public HashMap<String, Object> InsertHistory(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		try {
+			System.out.println("service=>"+map);
+			int cnt= productMapper.historyInsert(map);
+			resultMap.put("result","sucess");
+			
+		}catch(Exception e) {
+			resultMap.put("result","fail");
+			System.out.println(e.getMessage());
+		}
+		return resultMap;
+	}
 
 
 }
