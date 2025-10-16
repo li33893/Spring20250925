@@ -22,7 +22,19 @@ public interface BbsMapper {
 	
 	//view
 	BBS bbsSelect(HashMap<String, Object> map);
-
+	
+	//update
+	int bbsUpdate(HashMap<String, Object> map);
+	
+	//cnt
+	int bbsCount(HashMap<String, Object> map);
+	
+	//upload img
+	int bbsImgInsert(HashMap<String, Object> map);
+		
+	//file content
+	List <BBS> fileListSelect(HashMap<String, Object> map);
+	
 	
 	
 }
