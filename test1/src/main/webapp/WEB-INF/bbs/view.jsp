@@ -33,10 +33,14 @@
                     <th>내용</th>
                     <th>조회수</th>
                     <th>작성일</th>
+                    <th>파일첨부</th>
                 </tr>
                 <tr>
                     <td>{{bbs.title}}</td>
-                    <td>{{bbs.contents}}</td>
+                    <td>{{bbs.contents}}
+                        <img v-for="item in fileList" :src="item.filePath">
+                        <div v-html="bbs.contents2"></div>
+                    </td>
                     <td>{{bbs.hit}}</td>
                     <td>{{bbs.cdate}}</td>
                 </tr>
@@ -44,7 +48,7 @@
          </div>
 
          <div>
-            <button @click="fnEdit">
+            <button @click="fnEdit(bbs.bbsNum)">
                 수정
             </button>
          </div>
@@ -63,7 +67,9 @@
                 bbsNum:"${bbsNum}",
                 bbs:{},
                 sessionId:"${sessionId}",
-                userId:"${sessionId}"     
+                userId:"${sessionId}" ,
+                fileList:[],
+                // hit:0    
                 
             };
         },
@@ -82,15 +88,21 @@
                     success: function (data) {
                         console.log(data);
                         self.bbs=data.bbs;
+                        self.fileList=data.fileList;
                         
                     }
                 });
             },
+            
 
             fnEdit:function(bbsNum){
                 pageChange("/bbs/update.do",{bbsNum:bbsNum});
 
             },
+
+            
+
+        
            
             
 
@@ -98,6 +110,7 @@
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
+            // self.fnHitPlus();
             self.fnBBS();
             
         }
