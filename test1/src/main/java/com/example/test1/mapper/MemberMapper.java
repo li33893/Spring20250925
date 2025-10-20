@@ -26,5 +26,11 @@ public interface MemberMapper {
 	int pwdUpdate(HashMap <String, Object> map);
 	
 	int pwdCheck(HashMap <String, Object> map);
+	
+	int memberCount(HashMap <String, Object> map);
+	
+	int memberListDelete (HashMap<String, Object> map);
+	
+	Member memberSelect(HashMap<String, Object> map);
 
 }

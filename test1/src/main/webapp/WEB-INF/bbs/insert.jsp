@@ -46,10 +46,8 @@
                     </tr>
                     <tr>
                         <td><input type="text" v-model="title"></td>
-                        <td><div id="editor" ></div></td>
-                        <td><input type="text" v-model="userId" readonly></td>
-                        <td><input type="file" id="file1" name="file1" accept=".jpg, .png"></td>
-                        
+                        <td><input type="text" v-model="contents"></td>
+                        <td><input type="text" v-model="userId" readonly></td> 
                     </tr>
                 </table>
                 <div><button @click="fnInsert()">삽입</button></div>
@@ -87,30 +85,19 @@
                         type: "POST",
                         data: param,
                         success: function (data) {
-                            alert("삽입되었습니다.");
-
-                            var form = new FormData();
-                            form.append("file1", $("#file1")[0].files[0]);
-                            form.append("bbsNum", data.bbsNum); // 임시 pk
-                            self.upload(form);
-                            // location.href="board-list.do";
-                            console.log("bbsNum:", data.bbsNum);
+                            if(data.result=="success"){ 
+                                alert("삽입되었습니다.");
+                                self.fnBack();
+                                
+                            }else{
+                                alert("오류가 발생했습니다.");
+                            }
                         }
                     });
                 },
-                upload: function (form) {
-                    var self = this;
-                    $.ajax({
-                        url: "/fileUpload.dox"
-                        , type: "POST"
-                        , processData: false
-                        , contentType: false
-                        , data: form
-                        , success: function (data) {
-                            console.log(data);
 
-                        }
-                    });
+                fnBack:function(){
+                    location.href="/bbs/list.do";
                 }
                 
             }, // methods
@@ -122,25 +109,7 @@
                     location.href = "/member/login.do";
                 }
 
-                 // Quill 에디터 초기화
-                var quill = new Quill('#editor', {
-                    theme: 'snow',
-                    modules: {
-                        toolbar: [
-                            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                            ['bold', 'italic', 'underline'],
-                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                            ['link', 'image'],
-                            ['clean']
-                        ]
-                    }
-                });
-
-            // 에디터 내용이 변경될 때마다 Vue 데이터를 업데이트
-                quill.on('text-change', function() {
-                    self.contents = quill.root.innerHTML;
-                });
-
+                
             }
             
         });

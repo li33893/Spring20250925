@@ -33,7 +33,7 @@
                     <th>내용</th>
                     <th>조회수</th>
                     <th>작성일</th>
-                    <th>파일첨부</th>
+                    
                 </tr>
                 <tr>
                     <td>{{bbs.title}}</td>
@@ -48,7 +48,8 @@
          </div>
 
          <div>
-            <button @click="fnEdit(bbs.bbsNum)">
+            <!--！！！！！！！！！要传到下一页，所有需要pagechange！！！！！！！！-->
+            <button @click="fnEdit()">
                 수정
             </button>
          </div>
@@ -95,10 +96,14 @@
             },
             
 
-            fnEdit:function(bbsNum){
-                pageChange("/bbs/update.do",{bbsNum:bbsNum});
+            fnEdit:function(){
+                //别忘了这个
+                let self=this;
+                pageChange("/bbs/update.do",{bbsNum:self.bbsNum});
 
             },
+
+            
 
             
 

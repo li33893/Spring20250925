@@ -33,7 +33,7 @@
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
          <div>
             <select v-model="pageSize" @change="fnList">
-                <option value="1">1</option>
+                <option value="3">3</option>
                 <option value="5">5</option>
                 <option value="10">10</option>
             </select>
@@ -63,6 +63,7 @@
                 <tr v-for="bbs in bbsList">
                     <td><input type="checkbox" :value="bbs.bbsNum" v-model="selectItem" ></td>
                     <td>{{bbs.bbsNum}}</td>
+                    <!--！！！！！！！！！！别忘了view后面的PK值！！！！！！！-->
                     <td><a href="javascript:;" @click="fnView(bbs.bbsNum)">{{bbs.title}}</a></td>
                     <td>{{bbs.contents}}</td>
                     <td style="color:red" v-if="bbs.hit>25">{{bbs.hit}}</td>
@@ -74,7 +75,7 @@
             </table>
          </div>
 
-         <div><button @click="fnPre()">◀</button><a href="javascript:;" v-for="num in pageRangeList" @click="fnChange(num)" :class="{active:page == num}">{{num}}</a><button @click="fnNext()">▶</button></div>
+         <div><span v-if="page>1"><button @click="fnPre()">◀</button></span><a href="javascript:;" v-for="num in pageRangeList" @click="fnChange(num)" :class="{active:page == num}">{{num}}</a><span v-if="page!=pageNum"><button @click="fnNext()">▶</button></span></div>
 
          <div>
             <button @click="fnInsert">
@@ -100,13 +101,18 @@
                 // 변수 - (key : value)
                 bbsList:[],
                 sessionId: "${sessionId}",
+
+                //选中删除
                 selectItem:[],
                 flgAllChecked:false,
+
+                //筛选选项并搜索
                 keyWord:"",
                 option:"all",
 
-                pageRangeList:[],
 
+                //所有和page相关的东西
+                pageRangeList:[],
                 pageSize:5,
                 page:1,
                 pageRange:6,
@@ -181,8 +187,15 @@
                     type: "POST",
                     data: param,
                     success: function (data) {
-						alert("삭제되었습니다");
-                        self.fnList();
+						if(data.result=="success"){
+                            alert("삭제되었습니다");
+                            self.page=1;
+                            self.fnList();
+
+                        }else{
+                            alert("오류가 발생하였습니다.")
+                        }
+                        
 						
                     }
                 });
@@ -232,6 +245,8 @@
                 self.fnList();
                 
             },
+
+            
 
 
             

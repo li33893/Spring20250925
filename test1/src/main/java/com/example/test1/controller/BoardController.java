@@ -140,7 +140,7 @@ public class BoardController {
 	}
 	
 	// controller
-	@RequestMapping("/fileUpload.dox")
+	@RequestMapping("/fileUpload.dox1")
 	@ResponseBody
 	public String result(@RequestParam("file1") MultipartFile multi, @RequestParam("boardNo") int boardNo, HttpServletRequest request,HttpServletResponse response, Model model)
 	{

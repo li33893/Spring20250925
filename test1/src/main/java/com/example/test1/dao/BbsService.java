@@ -37,9 +37,6 @@ public class BbsService {
 		// TODO Auto-generated method stub
 		//제품 목록
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		
-		 
-		
 		try {
 			List <BBS> bbsList= bbsMapper.bbsListSelect(map);
 			resultMap.put("bbsList",bbsList);
@@ -48,13 +45,10 @@ public class BbsService {
 			resultMap.put("result","sucess");
 		}catch(Exception e) {
 			resultMap.put("result","fail");
-			System.out.println(e.getMessage());
-			
-		}
-		
+			System.out.println(e.getMessage());		
+		}	
 		 return resultMap;
-		
-		
+				
 	}
 	
 	public HashMap<String, Object> InsertBbs(HashMap<String, Object> map) {
@@ -73,7 +67,7 @@ public class BbsService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		System.out.println("service=>"+map);
 		int cnt=bbsMapper.bbsListDelete(map);
-		resultMap.put("result","sucess");
+		resultMap.put("result","success");
 		return resultMap;
 	}
 	
@@ -89,11 +83,8 @@ public class BbsService {
 		BBS bbs= bbsMapper.bbsSelect(map);//这段的作用是告诉mapper从哪里查询数据   map：从controller传来的查询条件 
 													//返回的结果给再装到board里面	
 		
-		List <BBS> fileList=bbsMapper.fileListSelect(map);
-		
 		//2.返回过程	
 		resultMap.put("bbs",bbs);
-		resultMap.put("fileList",fileList);
 		resultMap.put("result","sucess");
 		return resultMap;
 	}
@@ -107,10 +98,7 @@ public class BbsService {
 		return resultMap;
 	}
 	
-	public void InsertBbsImg(HashMap<String, Object> map) {
-		// TODO Auto-generated method stub
-		int cnt= bbsMapper.bbsImgInsert(map);
-	}
+	
 	
 	
 }

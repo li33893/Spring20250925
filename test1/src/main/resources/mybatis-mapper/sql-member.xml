@@ -31,9 +31,48 @@
 	
 	
 	<select id="memberList" parameterType="hashmap" resultType="com.example.test1.model.Member">
-		SELECT U.*, DECODE(BIRTH,NULL,'정보없음',SUBSTR(BIRTH,3,2)||'.'||SUBSTR(BIRTH,5,2)||'.'||SUBSTR(BIRTH,7,2)) AS DATE_OF_BIRTH, TO_CHAR(CDATETIME,'YYYY.MM.DD') AS JOINTIME FROM TBL_USER U
+		SELECT U.*, DECODE(BIRTH,NULL,'정보없음',SUBSTR(BIRTH,3,2)||'.'||SUBSTR(BIRTH,5,2)||'.'||SUBSTR(BIRTH,7,2)) AS DATE_OF_BIRTH, TO_CHAR(CDATETIME,'YYYY.MM.DD') AS JOINTIME 
+		FROM TBL_USER U
+		WHERE 1=1
+		<if test="option=='all'">
+   			AND (
+				USERID LIKE '%'||#{keyWord}||'%' OR NICKNAME LIKE '%'||#{keyWord}||'%'
+				)
+   		</if>
+   		<if test="option=='userId'">
+   			AND USERID LIKE '%'||#{keyWord}||'%'
+   		</if>
+   		<if test="option=='nickName'">
+   			AND NICKNAME LIKE '%'||#{keyWord}||'%'
+   		</if>
+		ORDER BY DATE_OF_BIRTH DESC
+		OFFSET #{offset} ROWS FETCH NEXT #{fetchRows} ROWS ONLY
 	</select>
 	
+	
+	<select id="memberCount" parameterType="hashmap" resultType="int">
+		SELECT COUNT(USERID) AS USERNUM
+		FROM TBL_USER U
+		WHERE 1=1
+		<if test="option=='all'">
+   			AND (
+				USERID LIKE '%'||#{keyWord}||'%' OR NICKNAME LIKE '%'||#{keyWord}||'%'
+				)
+   		</if>
+   		<if test="option=='userId'">
+   			AND USERID LIKE '%'||#{keyWord}||'%'
+   		</if>
+   		<if test="option=='nickName'">
+   			AND NICKNAME LIKE '%'||#{keyWord}||'%'
+   		</if>
+   	</select>
+   	
+   	<delete id="memberListDelete"  parameterType="hashmap">
+		DELETE FROM TBL_USER WHERE USERID IN
+		<foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
 	
 	<update id="cntIncrease" parameterType="hashmap">
 			UPDATE TBL_USER
@@ -57,6 +96,12 @@
 		SELECT COUNT(*)
 		FROM TBL_USER
 		WHERE USERID = #{userId} AND PASSWORD=#{hashPwd}
+	</select>
+	
+	<select id="memberSelect" parameterType="hashmap" resultType="com.example.test1.model.Member">
+		SELECT U.*, DECODE(BIRTH,NULL,'정보없음',SUBSTR(BIRTH,3,2)||'.'||SUBSTR(BIRTH,5,2)||'.'||SUBSTR(BIRTH,7,2)) AS DATE_OF_BIRTH, TO_CHAR(CDATETIME,'YYYY.MM.DD') AS JOINTIME 
+		 FROM TBL_USER U
+		WHERE U.USERID = #{userId}
 	</select>
 	
 	

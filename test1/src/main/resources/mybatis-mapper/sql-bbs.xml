@@ -23,11 +23,8 @@
 		OFFSET #{offset} ROWS FETCH NEXT #{fetchRows} ROWS ONLY
 	</select>
 	
-	<insert id="bbsInsert" parameterType="hashmap"  
-			useGeneratedKeys="true" 
-			keyColumn="BBS_NUM" 
-			keyProperty="BBS_NUM">
-   		INSERT INTO TBL_BBS VALUES(BBS_SEQ.NEXTVAL,#{title},'',0,#{userId},SYSDATE,SYSDATE,#{contents})
+	<insert id="bbsInsert" parameterType="hashmap">
+   		INSERT INTO TBL_BBS VALUES(BBS_SEQ.NEXTVAL,#{title},#{contents},0,#{userId},SYSDATE,SYSDATE)
 	</insert>
 	
 	<delete id="bbsListDelete"  parameterType="hashmap">
@@ -67,15 +64,8 @@
    		</if>
 	</select>
 	
-	<insert id="bbsImgInsert" parameterType="hashmap">
-		INSERT INTO TBL_BBS_FILE VALUES (FILE_SEQ.NEXTVAL, #{bbsNum}, #{path},#{filename},#{orgName},#{size},#{ext})
-	</insert>
 	
-	<select id="fileListSelect" parameterType="hashmap" resultType="com.example.test1.model.BBS">
-		SELECT *
-		FROM TBL_BBS_FILE
-		WHERE BOARDNO=#{bbsNum}
-	</select>
+	
 	
 	
 </mapper>

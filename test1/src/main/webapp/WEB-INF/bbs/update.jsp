@@ -83,8 +83,8 @@
                     data: param,
                     success: function (data) {
                         self.bbs=data.bbs;
-                        self.title=self.bbs.title;
-                        self.contents=self.bbs.contents;    
+                        self.title=data.bbs.title;
+                        self.contents=data.bbs.contents;    
                     }
                 });
             },
@@ -103,10 +103,15 @@
                     data: param,
                     success: function (data) {
                         alert("수정되었습니다.");
+                        self.fnBack();
                         
                     }
                 });
             },
+
+            fnBack:function(){
+                location.href="/bbs/list.do";
+            }
 
             
            

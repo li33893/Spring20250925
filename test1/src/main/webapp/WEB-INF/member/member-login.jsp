@@ -37,9 +37,13 @@
             <button @click="fnLogin">login</button>
             <a href="/member/join.do"><button>signup</button></a>
             <a href="/member/pwd.do"><button>비밀번호 찾기</button></a>
-            
-            
         </div>
+
+         <a :href="location">
+			<img src="/img/kakao.png">
+		</a>
+
+        
     </div>
 </body>
 </html>
@@ -50,7 +54,10 @@
             return {
                 // 변수 - (key : value)
                 id:"",
-                pwd:""
+                pwd:"",
+                location:"${location}",
+                sessionName:"${sessionName}",
+                code:"",
             };
         },
         methods: {
@@ -77,6 +84,8 @@
                 });
             },
 
+            
+
             // fnFailCnt:function(){
 
             // }
@@ -86,6 +95,8 @@
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
+            self.location;
+            
         }
     });
 

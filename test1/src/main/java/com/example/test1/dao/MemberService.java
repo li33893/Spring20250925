@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.test1.mapper.MemberMapper;
+import com.example.test1.model.BBS;
 import com.example.test1.model.Board;
 import com.example.test1.model.Member;
 
@@ -189,6 +190,8 @@ public class MemberService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		try {
 			List <Member> memberList= memberMapper.memberList(map);
+			int totalRows=memberMapper.memberCount(map);
+			resultMap.put("totalRows",totalRows);
 			resultMap.put("memberList",memberList);
 			resultMap.put("result","sucess");
 		}catch(Exception e) {
@@ -275,6 +278,34 @@ public class MemberService {
 			resultMap.put("result","fail");
 			System.out.println(e.getMessage());
 		}
+		return resultMap;
+	}
+	
+	public HashMap<String, Object> DeleteMemberList(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		System.out.println("service=>"+map);
+		int cnt=memberMapper.memberListDelete(map);
+		resultMap.put("result","success");
+		return resultMap;
+	}
+	
+	
+	public HashMap<String, Object> SelectMember(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		System.out.println("service=>"+map);
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		//1.从controller传入，传给mapper的过程
+		//1.1这个map是方法参数，是从controller里面传进来的map，controller里面的map也只负责传进来，都是只负责输入不负责传出
+		
+		map.put("userId", map.get("userId"));
+		
+		Member member= memberMapper.memberSelect(map);//这段的作用是告诉mapper从哪里查询数据   map：从controller传来的查询条件 
+													//返回的结果给再装到board里面	
+		
+		//2.返回过程	
+		resultMap.put("member",member);
+		resultMap.put("result","sucess");
 		return resultMap;
 	}
 	

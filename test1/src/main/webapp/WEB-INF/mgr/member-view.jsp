@@ -26,6 +26,38 @@
 <body>
     <div id="app">
         <!-- html 코드는 id가 app인 태그 안에서 작업 -->
+          <table>
+            <tr>
+                <th>아이디</th>
+                <th>비밀번호</th>
+                <th>이름</th>
+                <th>생일</th>
+                <th>닉네임</th>
+                <th>주소</th>
+                <th>전화번호</th>
+                <th>이메일</th>
+                <th>성별</th>
+                <th>상태</th>
+                <th>가입날짜</th>
+                <th>로그인 오류수</th>
+            </tr>
+            <tr>
+                <td>
+                    <a href="javascript:;" @click="fnView(member.userId)">{{member.userId}}</a>
+                </td>
+                <td>{{member.passWord}}</td>
+                <td>{{member.name}}</td>
+                <td>{{member.dateofBirth}}</td>
+                <td>{{member.nickName}}</td>
+                <td>{{member.address}}</td>
+                <td>{{member.phone}}</td>
+                <td>{{member.email}}</td>
+                <td>{{member.gender}}</td>
+                <td>{{member.status}}</td>
+                <td>{{member.joinTime}}</td>
+                <td>{{member.cnt}}</td>               
+            </tr>
+        </table>
     </div>
 </body>
 </html>
@@ -35,20 +67,24 @@
         data() {
             return {
                 // 변수 - (key : value)
-                userId:"${userId}"
+                userId:"${userId}",
+                member:{}
             };
         },
         methods: {
             // 함수(메소드) - (key : function())
             fnList: function () {
                 let self = this;
-                let param = {};
+                let param = {
+                    userId:self.userId
+                };
                 $.ajax({
-                    url: "",
+                    url: "/mgr/view.dox",
                     dataType: "json",
                     type: "POST",
                     data: param,
                     success: function (data) {
+                        self.member=data.member;
 
                     }
                 });
@@ -57,6 +93,7 @@
         mounted() {
             // 처음 시작할 때 실행되는 부분
             let self = this;
+            self.fnList();
         }
     });
 
