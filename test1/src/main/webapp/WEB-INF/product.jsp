@@ -11,6 +11,7 @@
     <title>쇼핑몰 헤더</title>
     <link rel="stylesheet" href="/css/product-style.css">
     <script src="/js/page-change.js"></script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </head>
 
 <body>
@@ -67,6 +68,7 @@
             <div class="login-btn">
                 <button>로그인</button>
             </div>
+            <div id="google_translate_element"></div>
         </header>
 
         <main>
@@ -127,6 +129,7 @@
         mounted() {
             var self = this;
             self.fnList('','');
+            new google.translate.TranslateElement({pageLanguage: 'ko',autoDisplay: false}, 'google_translate_element')
         }
     });
     app.mount('#app');

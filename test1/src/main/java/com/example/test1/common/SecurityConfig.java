@@ -1,11 +1,15 @@
 package com.example.test1.common;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.client.RestTemplate;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 public class SecurityConfig {
@@ -28,5 +32,20 @@ public class SecurityConfig {
             ; // HTTP Basic 인증 비활성화
 
         return http.build();
+    }
+    
+    
+    @Configuration
+    @RequiredArgsConstructor
+    public class GeminiRestTemplateConfig {
+
+        @Bean
+        @Qualifier("geminiRestTemplate")
+        public RestTemplate geminiRestTemplate() {
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.getInterceptors().add((request, body, execution) -> execution.execute(request, body));
+
+            return restTemplate;
+        }
     }
 }

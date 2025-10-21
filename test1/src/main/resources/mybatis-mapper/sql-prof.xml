@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.test1.mapper.ProfMapper">
+	<select id="profListSelect" parameterType="hashmap" resultType="com.example.test1.model.Prof">
+   		SELECT P.*,(PAY+BONUS) AS PAYANDBONUS,TO_CHAR(HIREDATE,'YYYY-MM-DD') AS HIRED
+		FROM PROFESSOR P
+   		WHERE NAME LIKE '%'||#{keyWord}||'%'
+		OFFSET #{offset} ROWS FETCH NEXT #{fetchRows} ROWS ONLY
+	</select>
+	
+	<select id="profCount" parameterType="hashmap" resultType="int">
+   		SELECT COUNT(PROFNO) AS TOTAL_ROWS
+		FROM PROFESSOR
+   		WHERE 1=1
+   		<if test="keyWord!=null and keyWord!=''"> 			
+		AND NAME LIKE '%'||#{keyWord}||'%'
+		</if>
+	</select>
+	
+	<delete id="profListDelete"  parameterType="hashmap">
+		DELETE FROM PROFESSOR WHERE PROFNO IN
+		<foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<select id="profSelect" parameterType="hashmap" resultType="com.example.test1.model.Prof">
+		SELECT PROFNO,NAME,ID,ADDRESS,DNAME FROM PROFESSOR P
+		INNER JOIN DEPARTMENT D ON P.DEPTNO=D.DEPTNO
+		WHERE PROFNO=#{profNo}
+	</select>
+	
+	교수번호, 이름, 아이디, 주소, 소속학과 이름
+	<update id="profUpdate" parameterType="hashmap">
+		UPDATE PROFSSOR SET NAME=#{name},ID=#{id},ADDRESS=#{address}
+		WHERE PROFNO=#{profNo}
+	</update>
+	
+	<update id="dUpdate" parameterType="hashmap">
+		UPDATE DEPARTMENT SET DNAME=#{dName}
+		WHERE DEPTNO=#{dName}
+	</update>
+	
+	
+	
+	<select id="profCheck" parameterType="hashmap" resultType="com.example.test1.model.Prof">
+		SELECT *
+		FROM PROFESSOR
+		WHERE PROFNO = #{profNo}
+	</select>
+	
+	<insert id="profAdd" parameterType="hashmap">
+		INSERT INTO PROFESSOR VALUES (#{profNo}, #{name}, #{id},#{position},#{pay},SYSDATE, 0,0,NULL,NULL,#{addr})
+	</insert>
+	
+	
+	
+	
+	
+</mapper>

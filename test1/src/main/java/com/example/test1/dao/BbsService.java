@@ -78,8 +78,6 @@ public class BbsService {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		//1.从controller传入，传给mapper的过程
 		//1.1这个map是方法参数，是从controller里面传进来的map，controller里面的map也只负责传进来，都是只负责输入不负责传出
-		
-		map.put("bbsNum", map.get("bbsNum"));
 		BBS bbs= bbsMapper.bbsSelect(map);//这段的作用是告诉mapper从哪里查询数据   map：从controller传来的查询条件 
 													//返回的结果给再装到board里面	
 		
