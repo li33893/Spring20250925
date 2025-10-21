@@ -61,21 +61,28 @@ public class ProfService{
 	
 	public HashMap<String, Object> UpdateProf(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
-		System.out.println("service=>"+map);
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		int cnt= profMapper.profUpdate(map);
-		resultMap.put("result","success");
-		return resultMap;
+	    try {
+	       int cnt = profMapper.profUpdate(map);
+	       int cnt2 = profMapper.dUpdate(map);
+
+	        // ⭐ 检查是否更新成功
+	        if (cnt > 0 && cnt2 > 0) {
+	            resultMap.put("result", "success");
+	        } else if (cnt > 0) {
+	            resultMap.put("result", "fail");
+	        } else {
+	            resultMap.put("result", "fail");
+	        }
+	        
+	    } catch (Exception e) {
+	        resultMap.put("result", "fail");
+	        System.out.println(e.getMessage());
+	    }
+	    
+	    return resultMap;
 	}
 	
-	public HashMap<String, Object> UpdateD(HashMap<String, Object> map) {
-		// TODO Auto-generated method stub
-		System.out.println("service=>"+map);
-		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		int cnt= profMapper.dUpdate(map);
-		resultMap.put("result","success");
-		return resultMap;
-	}
 	
 	public HashMap<String, Object> CheckProf( HashMap<String, Object> map){
 		
