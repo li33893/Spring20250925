@@ -27,20 +27,19 @@
 	</delete>
 	
 	<select id="profSelect" parameterType="hashmap" resultType="com.example.test1.model.Prof">
-		SELECT PROFNO,NAME,ID,ADDRESS,DNAME FROM PROFESSOR P
+		SELECT PROFNO,NAME,ID,ADDRESS,DNAME,D.DEPTNO FROM PROFESSOR P
 		INNER JOIN DEPARTMENT D ON P.DEPTNO=D.DEPTNO
 		WHERE PROFNO=#{profNo}
 	</select>
 	
-	교수번호, 이름, 아이디, 주소, 소속학과 이름
 	<update id="profUpdate" parameterType="hashmap">
-		UPDATE PROFSSOR SET NAME=#{name},ID=#{id},ADDRESS=#{address}
+		UPDATE PROFESSOR SET NAME=#{name},ID=#{id},ADDRESS=#{address}
 		WHERE PROFNO=#{profNo}
 	</update>
 	
 	<update id="dUpdate" parameterType="hashmap">
 		UPDATE DEPARTMENT SET DNAME=#{dName}
-		WHERE DEPTNO=#{dName}
+		WHERE DEPTNO=#{deptNo}
 	</update>
 	
 	
