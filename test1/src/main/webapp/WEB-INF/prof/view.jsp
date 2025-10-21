@@ -93,12 +93,12 @@
             },
             
 
-            fnEdit:function(){
-                //别忘了这个
-                let self=this;
-                pageChange("/prof/edit.do",{profNo:self.profNo});
-
-            },
+              fnView:function(profNo, deptNo){
+        		pageChange("/prof/edit.do", {
+            		profNo: profNo,
+           			deptNo: deptNo
+        		});
+    		},
 
             
 
