@@ -14,4 +14,5 @@ public class Prof {
     private String dName;
     private int pay;
     private String position;
+    private int deptNo;
 }
