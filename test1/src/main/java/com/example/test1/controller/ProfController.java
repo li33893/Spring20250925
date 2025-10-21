@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.test1.dao.ProfService;
-import com.example.test1.dao.UserService;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
@@ -45,6 +45,7 @@ public class ProfController {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();//多余
 		//把map里的boardNo值放到request里面去
 		request.setAttribute("profNo",map.get("profNo"));
+		request.setAttribute("deptNo",map.get("deptNo"));
         return "/prof/edit";
 	}
 	
@@ -53,7 +54,7 @@ public class ProfController {
         return "/prof/add";   
 	}
 	
-	@RequestMapping("/addr.do") 
+	@RequestMapping("/prof/addr.do") 
     public String addr(Model model) throws Exception{
         return "/jusoPopup";   
 	}
@@ -111,16 +112,6 @@ public class ProfController {
 		return new Gson().toJson(resultMap);
 	}
 	
-	
-	@RequestMapping(value = "/d/edit.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ResponseBody
-	public String ddate(Model model, @RequestParam HashMap<String, Object> map) throws Exception {
-		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		resultMap = profService.UpdateD(map);
-		System.out.println(map);
-		
-		return new Gson().toJson(resultMap);
-	}
 	
 	
 	@RequestMapping(value = "/prof/check.dox", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
