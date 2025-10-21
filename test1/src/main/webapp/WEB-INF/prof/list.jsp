@@ -56,7 +56,7 @@
                 <tr v-for="prof in profList">
                     <td><input type="checkbox" :value="prof.profNo" v-model="selectItem" ></td>
                     <td>{{prof.profNo}}</td>
-                    <td><a href="javascript:;" @click="fnView(prof.profNo,prof.deptNo)">{{prof.name}}</a></td>
+                    <td><a href="javascript:;" @click="fnView(prof.profNo)">{{prof.name}}</a></td>
                     <td>{{prof.id}}</td>
                     <td>{{prof.payandBonus}}</td>
                     <td>{{prof.hireD}}</td>
@@ -191,12 +191,9 @@
                 });
             },
 
-          fnView:function(profNo, deptNo){
-    		pageChange("/prof/view.do", {
-        		profNo: profNo,
-       			deptNo: deptNo
-    		});
-		},
+          fnView:function(profNo){
+    		pageChange("/prof/view.do", {profNo: profNo});
+		  },
 
             
 
