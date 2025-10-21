@@ -58,7 +58,9 @@ public class ProfService{
 		resultMap.put("result","sucess");
 		return resultMap;
 	}
-	
+
+	//transactional可以实现一起成功一起失败，加入不成功自动回滚
+	@Transactional
 	public HashMap<String, Object> UpdateProf(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
