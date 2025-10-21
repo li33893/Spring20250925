@@ -156,7 +156,7 @@
                 if(self.flgAllChecked){
                     self.selectItem=[];
                     for(i=0;i<self.profList.length;i++){
-                        self.selectItem.push(self.profList[i].profNum);
+                        self.selectItem.push(self.profList[i].profNo);
                     }
                 }else{
                     self.selectItem=[];
@@ -191,12 +191,12 @@
                 });
             },
 
-            fnView:function(profNo,dpetNo){
-                
-                pageChange("/prof/view.do",{profNo:profNo});
-                pageChange("/prof/view.do",{deptNo:deptNo});
-
-            },
+          fnView:function(profNo, deptNo){
+    		pageChange("/prof/view.do", {
+        		profNo: profNo,
+       			deptNo: deptNo
+    		});
+		},
 
             
 
