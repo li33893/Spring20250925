@@ -65,8 +65,6 @@ public class ProfService{
 	    try {
 	       int cnt = profMapper.profUpdate(map);
 	       int cnt2 = profMapper.dUpdate(map);
-
-	        // ⭐ 检查是否更新成功
 	        if (cnt > 0 && cnt2 > 0) {
 	            resultMap.put("result", "success");
 	        } else if (cnt > 0) {
